@@ -17,6 +17,7 @@ type Heuristic = [Char]
 type HeuristicPopulation = [(Heuristic, (Score, Rounds))]
 
 -- STARTUP --------------------------------------------------------------------
+
 generateHeuristic :: Int -> Heuristic
 generateHeuristic seed = take 16 (randomRs ('0', '1') (mkStdGen seed))
 
@@ -25,6 +26,7 @@ generateHeuristicPopulationOfSize 0 _ = []
 generateHeuristicPopulationOfSize n seed = (generateHeuristic seed, (0, 0)) : generateHeuristicPopulationOfSize (n-1) (seed+1)
 
 -- APPLICATION ----------------------------------------------------------------
+
 applyPopulation :: HeuristicPopulation -> HeuristicPopulation
 applyPopulation hs = [(h, ((s + (applyHeuristic h)), (r+1))) | (h, (s, r)) <- hs]
 
@@ -36,6 +38,7 @@ applyHeuristic =  foldl' (\acc x -> acc * 2 + digitToInt x) 0
 -- TODO replace with call to Java function
 
 -- EVOLUTION ------------------------------------------------------------------
+
 -- Control function for this section
 evolvePopulation :: HeuristicPopulation -> HeuristicPopulation
 evolvePopulation hPop = take (length hPop) (sortByAverageScore (hPop ++ reproductionStep hPop ++ mutationStep hPop))
@@ -71,6 +74,7 @@ mutateHeuristic h = []
 applyMutoid :: Heuristic -> HeuristicPopulation
 applyMutoid m = [(m, (applyHeuristic m, 1))]
 
+-- HELPERS
 -- helper function to sort the population by s/r descending
 sortByAverageScore :: HeuristicPopulation -> HeuristicPopulation
 sortByAverageScore hPop = reverse (map snd (sort (getAverageScores hPop)))
@@ -78,10 +82,12 @@ sortByAverageScore hPop = reverse (map snd (sort (getAverageScores hPop)))
 -- this will favour those with higher scores & more rounds
 -- see sort behaviour on tuples
 
+-- helper function for above
 getAverageScores :: HeuristicPopulation -> [(Int, (Heuristic, (Score, Rounds)))]
 getAverageScores hPop = [((s `div` r), (h, (s, r))) | (h, (s, r)) <- hPop]
 
 -- JAVA INTERFACE -------------------------------------------------------------
+
 -- foreign import ccall "JavaCPP_init" c_javacpp_init :: CInt -> Ptr (Ptr CString) -> IO ()
 -- javacpp_init :: IO ()
 -- javacpp_init = c_javacpp_init 0 nullPtr
@@ -92,6 +98,7 @@ getAverageScores hPop = [((s `div` r), (h, (s, r))) | (h, (s, r)) <- hPop]
 -- I think I have to free the C vars afterwards?
 
 -- CONTROL --------------------------------------------------------------------
+
 -- At some future point this may be removed to the Control Layer
 main :: Int -> NominalDiffTime -> IO ()
 main seed limit = do
