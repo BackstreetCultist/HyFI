@@ -1,25 +1,27 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 module HyperHeuristic where
 
+import System.Random
 import System.IO.Unsafe
 
+import Data.List
 import Data.Time.Clock
 
 import Foreign.C
 import Foreign.Ptr
 
-type HeuristicRounds = Int
-type HeuristicScore = Int
+type Rounds = Int
+type Score = Int
 type Heuristic = [Char]
-type HeuristicPopulation = [(Heuristic, HeuristicScore, HeuristicRounds)]
+type HeuristicPopulation = [(Heuristic, Score, Rounds)]
 
 -- STARTUP --------------------------------------------------------------------
-generateHeuristic :: Heuristic
-generateHeuristic = []
+generateHeuristic :: Int -> Heuristic
+generateHeuristic seed = take 16 (randomRs ('0', '1') (mkStdGen seed))
 
-generateHeuristicSetOfSize :: Int -> HeuristicPopulation
-generateHeuristicSetOfSize 0 = []
-generateHeuristicSetOfSize n = (generateHeuristic, 0, 0) : generateHeuristicSetOfSize (n-1)
+generateHeuristicSetOfSize :: Int -> Int -> HeuristicPopulation
+generateHeuristicSetOfSize 0 _ = []
+generateHeuristicSetOfSize n seed = (generateHeuristic seed, 0, 0) : generateHeuristicSetOfSize (n-1) (seed+1)
 
 -- APPLICATION ----------------------------------------------------------------
 applyPopulation :: HeuristicPopulation -> HeuristicPopulation
@@ -55,10 +57,10 @@ mutateHeuristic h = []
 
 -- CONTROL --------------------------------------------------------------------
 -- At some future point this may be removed to the Control Layer
-main :: IO ()
-main = do
+main :: Int -> IO ()
+main seed = do
     -- javacpp_init
-    let hPop = generateHeuristicSetOfSize 8
+    let hPop = generateHeuristicSetOfSize 8 seed
     startTime <- getCurrentTime
     print hPop
     currentTime <- getCurrentTime
