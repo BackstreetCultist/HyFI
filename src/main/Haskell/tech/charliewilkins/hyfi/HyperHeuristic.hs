@@ -4,6 +4,7 @@ module HyperHeuristic where
 import System.Random
 import System.IO.Unsafe
 
+import Data.Char --TODO remove (used currently in applyHeuristic)
 import Data.List
 import Data.Time.Clock
 
@@ -25,17 +26,19 @@ generateHeuristicSetOfSize n seed = (generateHeuristic seed, 0, 0) : generateHeu
 
 -- APPLICATION ----------------------------------------------------------------
 applyPopulation :: HeuristicPopulation -> HeuristicPopulation
-applyPopulation hPop = []
+applyPopulation hs = [(h, (s + (applyHeuristic h)), (r+1)) | (h, s, r) <- hs]
 
 -- apply a heuristic and get back a score for that run
 -- this is where we call in to the solution layer
 applyHeuristic :: Heuristic -> Int
-applyHeuristic h = 0
+applyHeuristic =  foldl' (\acc x -> acc * 2 + digitToInt x) 0
+-- https://stackoverflow.com/questions/5921573/convert-a-string-representing-a-binary-number-to-a-base-10-string-haskell
+-- TODO replace with call to Java function
 
 -- EVOLUTION ------------------------------------------------------------------
 -- Control function for this section
 evolvePopulation :: HeuristicPopulation -> HeuristicPopulation
-evolvePopulation hPop = []
+evolvePopulation hPop = hPop
 -- Produces a new population of length equal to the original
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
