@@ -2,6 +2,9 @@
 module HyperHeuristic where
 
 import System.IO.Unsafe
+
+import Data.Time.Clock
+
 import Foreign.C
 import Foreign.Ptr
 
@@ -41,14 +44,33 @@ mutateHeuristic :: Heuristic -> Heuristic
 mutateHeuristic h = []
 
 -- JAVA INTERFACE -------------------------------------------------------------
-foreign import ccall "JavaCPP_init" c_javacpp_init :: CInt -> Ptr (Ptr CString) -> IO ()
-javacpp_init :: IO ()
-javacpp_init = c_javacpp_init 0 nullPtr
+-- foreign import ccall "JavaCPP_init" c_javacpp_init :: CInt -> Ptr (Ptr CString) -> IO ()
+-- javacpp_init :: IO ()
+-- javacpp_init = c_javacpp_init 0 nullPtr
 
-foreign import ccall "runHeuristic" c_runHeuristic :: CString -> CInt
-runHeuristic :: Heuristic -> Int
-runHeuristic h = fromIntegral (c_runHeuristic (unsafePerformIO(newCString h)))
+-- foreign import ccall "runHeuristic" c_runHeuristic :: CString -> CInt
+-- runHeuristic :: Heuristic -> Int
+-- runHeuristic h = fromIntegral (c_runHeuristic (unsafePerformIO(newCString h)))
 -- I think I have to free the C vars afterwards?
 
 -- CONTROL --------------------------------------------------------------------
 -- At some future point this may be removed to the Control Layer
+main :: IO ()
+main = do
+    -- javacpp_init
+    let hPop = generateHeuristicSetOfSize 8
+    startTime <- getCurrentTime
+    print hPop
+    currentTime <- getCurrentTime
+    print("Starting loop")
+    newPop <- coreLoop hPop startTime currentTime 5
+    print("Exited loop")
+    print newPop
+
+coreLoop :: HeuristicPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO (HeuristicPopulation)
+coreLoop hPop startTime currentTime limit | ((diffUTCTime currentTime startTime) <= limit) = do
+                                                                                        newTime <- getCurrentTime
+                                                                                        let newPop = hPop -- logic goes here!
+                                                                                        coreLoop newPop startTime newTime limit
+                                          | otherwise = do
+                                                return hPop
