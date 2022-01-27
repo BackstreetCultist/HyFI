@@ -22,8 +22,8 @@ generateHeuristicSetOfSize 0 = []
 generateHeuristicSetOfSize n = (generateHeuristic, 0, 0) : generateHeuristicSetOfSize (n-1)
 
 -- APPLICATION ----------------------------------------------------------------
-applyHeuristicPopulation :: HeuristicPopulation -> HeuristicPopulation
-applyHeuristicPopulation hPop = []
+applyPopulation :: HeuristicPopulation -> HeuristicPopulation
+applyPopulation hPop = []
 
 -- apply a heuristic and get back a score for that run
 -- this is where we call in to the solution layer
@@ -70,7 +70,7 @@ main = do
 coreLoop :: HeuristicPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO (HeuristicPopulation)
 coreLoop hPop startTime currentTime limit | ((diffUTCTime currentTime startTime) <= limit) = do
                                                                                         newTime <- getCurrentTime
-                                                                                        let newPop = hPop -- logic goes here!
+                                                                                        let newPop = evolvePopulation (applyPopulation hPop)
                                                                                         coreLoop newPop startTime newTime limit
                                           | otherwise = do
                                                 return hPop
