@@ -93,7 +93,19 @@ getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSiz
                                     randomisedList = randomiseList seed xs
 
 generateChildren :: (Heuristic, Heuristic) -> (Heuristic, Heuristic)
-generateChildren (p1, p2) = (p1, p2)
+generateChildren (p1, p2) = kPointCrossover (p1, p2) 1 (heuristicToSeed p1)
+
+kPointCrossover :: (Heuristic, Heuristic) -> Int -> Int -> (Heuristic, Heuristic)
+kPointCrossover x 0 _ = x
+kPointCrossover x k seed | (k `mod` 2 == 0) = kPointCrossover x (k-1) (seed+1)
+kPointCrossover x k seed | otherwise = onePointCrossover (kPointCrossover x (k-1) (seed+1)) seed
+
+onePointCrossover :: (Heuristic, Heuristic) -> Int -> (Heuristic, Heuristic)
+onePointCrossover (h1, h2) seed = (
+                                    (take i h1 ++ drop i h2),
+                                    (take i h2 ++ drop i h1)
+                                  ) where
+                                    i = getRandomIndex seed h1
 
 --Produces a HeuristicPopulation of length 2 after running each child once
 applyChildren :: (Heuristic, Heuristic) -> HeuristicPopulation
