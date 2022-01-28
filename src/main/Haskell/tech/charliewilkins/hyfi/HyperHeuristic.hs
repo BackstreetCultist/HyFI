@@ -7,6 +7,7 @@ import System.IO.Unsafe
 import Data.Char
 import Data.List
 import Data.Time.Clock
+import Data.Time.Clock.POSIX
 
 import Foreign.C
 import Foreign.Ptr
@@ -27,11 +28,22 @@ generateHeuristicPopulationOfSize n seed = (generateHeuristic seed, (0, 0)) : ge
 
 -- HELPERS --------------------------------------------------------------------
 
+-- Get seed with heuristic value as denary + current time
+getSeed :: Heuristic -> Int
+getSeed h = heuristicToSeed h + unsafePerformIO posixNanosInt
+
 -- Used to get seeds for random generators
 -- Since a heuristic is a binary string, we can take its denary value
 heuristicToSeed :: Heuristic -> Int
 heuristicToSeed = foldl' (\acc x -> acc * 2 + digitToInt x) 0
 -- https://stackoverflow.com/questions/5921573/convert-a-string-representing-a-binary-number-to-a-base-10-string-haskell
+
+posixNanosInt :: IO (Int)
+posixNanosInt = do
+                x <- getPOSIXTime
+                let y = (x*(10^9))
+                let z = floor y
+                return z
 
 -- This is a quick implementation of the Fisher-Yates Shuffle
 randomiseList :: Int -> [a] -> [a]
@@ -87,8 +99,8 @@ naiveSelection hPop = (fst (head sortedPop), fst (sortedPop !! 1)) where sortedP
 tournamentSelection :: HeuristicPopulation -> Int -> (Heuristic, Heuristic)
 tournamentSelection hPop k = 
                             (
-                                fst (head (sortByAverageScore (getRandomSublistOfSize k (heuristicToSeed (fst (head hPop))) hPop))),
-                                fst (head (sortByAverageScore (getRandomSublistOfSize k (heuristicToSeed (fst (last hPop))) hPop)))
+                                fst (head (sortByAverageScore (getRandomSublistOfSize k (getSeed (fst (head hPop))) hPop))),
+                                fst (head (sortByAverageScore (getRandomSublistOfSize k (getSeed (fst (last hPop))) hPop)))
                             )
 -- Note that this has the chance of selecting the same parent in both 'slots' - is this an issue? TODO
 
@@ -100,7 +112,7 @@ getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSiz
                                     randomisedList = randomiseList seed xs
 
 generateChildren :: (Heuristic, Heuristic) -> (Heuristic, Heuristic)
-generateChildren (p1, p2) = kPointCrossover (p1, p2) 1 (heuristicToSeed p1)
+generateChildren (p1, p2) = kPointCrossover (p1, p2) 1 (getSeed p1)
 
 kPointCrossover :: (Heuristic, Heuristic) -> Int -> Int -> (Heuristic, Heuristic)
 kPointCrossover x 0 _ = x
@@ -123,7 +135,7 @@ mutationStep :: HeuristicPopulation -> HeuristicPopulation
 mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
 
 selectHeuristicToMutate :: HeuristicPopulation -> Heuristic
-selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (heuristicToSeed (fst (head hPop))) hPop))
+selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (getSeed (fst (head hPop))) hPop))
 
 mutateHeuristic :: Heuristic -> Heuristic
 mutateHeuristic h = flipRandomBit h
@@ -132,7 +144,7 @@ flipRandomBit :: Heuristic -> Heuristic
 flipRandomBit h = take i h ++ [bit] ++ drop (i+1) h
                 where
                     bit = if (h !! i) == '0' then '1' else '0'
-                    i = getRandomIndex (heuristicToSeed h) h
+                    i = getRandomIndex (getSeed h) h
 
 applyMutoid :: Heuristic -> HeuristicPopulation
 applyMutoid m = [(m, (applyHeuristic m, 1))]
