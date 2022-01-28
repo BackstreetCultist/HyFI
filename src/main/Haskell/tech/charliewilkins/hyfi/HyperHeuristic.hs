@@ -58,9 +58,16 @@ applyHeuristic =  heuristicToSeed
 
 -- Control function for this section
 evolvePopulation :: HeuristicPopulation -> HeuristicPopulation
-evolvePopulation hPop = take (length hPop) (sortByAverageScore (hPop ++ reproductionStep hPop ++ mutationStep hPop))
+evolvePopulation hPop = survivalStep hPop (reproductionStep hPop) (mutationStep hPop)
 -- Produces a new population of length equal to the original
 -- Of the heuristics with the best average performance
+
+-- SURVIVAL
+survivalStep :: HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulation
+survivalStep hPop childs mutoids = replaceWorst hPop childs mutoids
+
+replaceWorst :: HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulation
+replaceWorst hPop childs mutoids = (drop (length childs + length mutoids) (reverse (sortByAverageScore hPop))) ++ childs ++ mutoids
 
 -- REPRODUCTION
 reproductionStep :: HeuristicPopulation -> HeuristicPopulation
