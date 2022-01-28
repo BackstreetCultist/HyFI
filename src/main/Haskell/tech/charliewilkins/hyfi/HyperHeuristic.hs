@@ -116,10 +116,16 @@ mutationStep :: HeuristicPopulation -> HeuristicPopulation
 mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
 
 selectHeuristicToMutate :: HeuristicPopulation -> Heuristic
-selectHeuristicToMutate (h:hPop) = fst h
+selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (heuristicToSeed (fst (head hPop))) hPop))
 
 mutateHeuristic :: Heuristic -> Heuristic
-mutateHeuristic h = []
+mutateHeuristic h = flipRandomBit h
+
+flipRandomBit :: Heuristic -> Heuristic
+flipRandomBit h = take i h ++ [bit] ++ drop (i+1) h
+                where
+                    bit = if (h !! i) == '0' then '1' else '0'
+                    i = getRandomIndex (heuristicToSeed h) h
 
 applyMutoid :: Heuristic -> HeuristicPopulation
 applyMutoid m = [(m, (applyHeuristic m, 1))]
