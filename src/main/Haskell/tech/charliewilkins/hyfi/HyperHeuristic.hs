@@ -4,7 +4,7 @@ module HyperHeuristic where
 import System.Random
 import System.IO.Unsafe
 
-import Data.Char --TODO remove (used currently in applyHeuristic)
+import Data.Char
 import Data.List
 import Data.Time.Clock
 
@@ -25,6 +25,24 @@ generateHeuristicPopulationOfSize :: Int -> Int -> HeuristicPopulation
 generateHeuristicPopulationOfSize 0 _ = []
 generateHeuristicPopulationOfSize n seed = (generateHeuristic seed, (0, 0)) : generateHeuristicPopulationOfSize (n-1) (seed+1)
 
+-- HELPERS --------------------------------------------------------------------
+
+-- Used to get seeds for random generators
+-- Since a heuristic is a binary string, we can take its denary value
+heuristicToSeed :: Heuristic -> Int
+heuristicToSeed = foldl' (\acc x -> acc * 2 + digitToInt x) 0
+-- https://stackoverflow.com/questions/5921573/convert-a-string-representing-a-binary-number-to-a-base-10-string-haskell
+
+-- This is a quick implementation of the Fisher-Yates Shuffle
+randomiseList :: Int -> [a] -> [a]
+randomiseList _ [] = []
+randomiseList seed xs = xs !! i : randomiseList (seed-1) (take i xs ++ drop (i+1) xs)
+                    where
+                        i = getRandomIndex seed xs
+
+getRandomIndex :: Int -> [a] -> Int
+getRandomIndex seed xs = fst (randomR (0, ((length xs)-1)) (mkStdGen seed))
+
 -- APPLICATION ----------------------------------------------------------------
 
 applyPopulation :: HeuristicPopulation -> HeuristicPopulation
@@ -33,8 +51,7 @@ applyPopulation hs = [(h, ((s + (applyHeuristic h)), (r+1))) | (h, (s, r)) <- hs
 -- apply a heuristic and get back a score for that run
 -- this is where we call in to the solution layer
 applyHeuristic :: Heuristic -> Int
-applyHeuristic =  foldl' (\acc x -> acc * 2 + digitToInt x) 0
--- https://stackoverflow.com/questions/5921573/convert-a-string-representing-a-binary-number-to-a-base-10-string-haskell
+applyHeuristic =  heuristicToSeed
 -- TODO replace with call to Java function
 
 -- EVOLUTION ------------------------------------------------------------------
@@ -50,9 +67,30 @@ reproductionStep :: HeuristicPopulation -> HeuristicPopulation
 reproductionStep hPop = applyChildren (generateChildren (selectParents hPop))
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
-selectParents hPop = (fst (head sortedPop), fst (sortedPop !! 1)) where sortedPop = sortByAverageScore hPop
+selectParents hPop = tournamentSelection hPop 3
 -- This assumes two parents - should we generalise to crossover between n parents?
+
+naiveSelection :: HeuristicPopulation -> (Heuristic, Heuristic)
+naiveSelection hPop = (fst (head sortedPop), fst (sortedPop !! 1)) where sortedPop = sortByAverageScore hPop
 -- Naive selection - take two best-performing
+
+-- This implementation of tournament selection based on:
+-- https://towardsdatascience.com/genetic-algorithm-a-simple-and-intuitive-guide-51c04cc1f9ed
+-- But with average score rather than f(x)
+tournamentSelection :: HeuristicPopulation -> Int -> (Heuristic, Heuristic)
+tournamentSelection hPop k = 
+                            (
+                                fst (head (sortByAverageScore (getRandomSublistOfSize k (heuristicToSeed (fst (head hPop))) hPop))),
+                                fst (head (sortByAverageScore (getRandomSublistOfSize k (heuristicToSeed (fst (last hPop))) hPop)))
+                            )
+-- Note that this has the chance of selecting the same parent in both 'slots' - is this an issue? TODO
+
+-- Returns a random sublist of size k
+getRandomSublistOfSize :: Int -> Int -> [a] -> [a]
+getRandomSublistOfSize 0 _ _ = []
+getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSize (k-1) (seed+1) (tail randomisedList)
+                                where
+                                    randomisedList = randomiseList seed xs
 
 generateChildren :: (Heuristic, Heuristic) -> (Heuristic, Heuristic)
 generateChildren (p1, p2) = (p1, p2)
