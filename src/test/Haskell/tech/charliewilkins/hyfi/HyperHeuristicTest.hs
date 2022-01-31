@@ -20,4 +20,4 @@ checkHeuristicChars = quickCheck prop_generateHeuristic_chars
 
 checkGenerateHeuristic = do
     checkHeuristicLength
-    checkHeuristicLength
+    checkHeuristicChars
