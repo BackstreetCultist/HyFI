@@ -4,6 +4,7 @@ import Test.QuickCheck
 
 import HyperHeuristic
 
+-- STARTUP --------------------------------------------------------------------
 -- generateHeuristic
 -- GIVEN a random seed
 -- WHEN I call generateHeuristic
@@ -21,3 +22,19 @@ checkHeuristicChars = quickCheck prop_generateHeuristic_chars
 checkGenerateHeuristic = do
     checkHeuristicLength
     checkHeuristicChars
+
+--generateHeuristicPopulationOfSize
+-- GIVEN a positive size n
+-- AND a random seed
+-- WHEN I call generateHeuristicPopulationOfSize
+-- THEN I recieve a population of size n
+
+prop_generateHeuristicPopulationOfSize_len (Positive n) x = length (generateHeuristicPopulationOfSize n x) == n
+checkHeuristicPopulationSize = quickCheck prop_generateHeuristicPopulationOfSize_len
+
+checkGenerateHeuristicPopulationOfSize = do
+    checkHeuristicPopulationSize
+
+checkStartup = do
+    checkGenerateHeuristic
+    checkGenerateHeuristicPopulationOfSize
