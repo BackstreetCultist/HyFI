@@ -17,11 +17,14 @@ The following problems are currently implemented, and can be solved by HyFI:
 ## Running
 
 The system arrives fully Dockerised for dependency management.
+The code can also be invoked manually with the following command:
+
+    ghci src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs
 
 ## Testing
 Haskell property tests built with QuickCheck are included,
 and can be run with the following commands:
 
-    ghci src/test/Haskell/tech/charliewilkins/hyfi/HyperHeuristicTest.hs  src/main/Haskell/tech/charliewilkins/hyfi/HyperHeuristic.hs 
+    ghci src/test/Haskell/tech/charliewilkins/hyfi/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs
 
 ## Implementing 
