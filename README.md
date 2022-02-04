@@ -19,7 +19,7 @@ The following problems are currently implemented, and can be solved by HyFI:
 The system arrives fully Dockerised for dependency management.
 The code can also be invoked manually with the following command:
 
-    ghci src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs
+    ghci src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/**/*.hs
 
 ## Testing
 Haskell property tests built with QuickCheck are included,
