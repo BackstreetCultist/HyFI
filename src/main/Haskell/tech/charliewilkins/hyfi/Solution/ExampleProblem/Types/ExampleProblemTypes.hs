@@ -6,6 +6,6 @@ type OperatorMagnitude = Int
 type OperatorClass = [Operator]
 type Evaluator = Solution -> Solution -> Int
 type Acceptor = Solution -> Solution -> Bool
-type Heuristic = (Operator, OperatorMagnitude, Acceptor, Evaluator)
+type BuiltHeuristic = (Operator, OperatorMagnitude, Acceptor, Evaluator)
 
 type Solution = [Char]
