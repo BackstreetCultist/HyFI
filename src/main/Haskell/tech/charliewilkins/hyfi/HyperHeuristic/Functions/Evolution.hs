@@ -1,14 +1,24 @@
 module Evolution where
 
+import Control.Monad.State
+
 import Data.List (sort)
 
 import HyperHeuristicTypes
 import RandomOperators (getSeed, randomiseList, getRandomIndex)
-import Application (applyHeuristic)
+import Application (applyPopulation)
+import Solution (SolutionPopulation)
 
 -- Control function for this section
-evolvePopulation :: HeuristicPopulation -> HeuristicPopulation
-evolvePopulation hPop = survivalStep hPop (reproductionStep hPop) (mutationStep hPop)
+evolvePopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+-- evolvePopulation hPop = survivalStep hPop (reproductionStep hPop) (mutationStep hPop)
+evolvePopulation initialSet = do
+                    initialSolutionPopulation <- get
+                    initialHeuristicPopulation <- initialSet
+                    reproductionHeuristicPopulation <- reproductionStep initialSet
+                    mutationHeuristicPopulation <- mutationStep (return reproductionHeuristicPopulation) -- Bind current state first
+                    return (survivalStep initialHeuristicPopulation reproductionHeuristicPopulation mutationHeuristicPopulation)
+
 -- Produces a new population of length equal to the original
 -- Of the heuristics with the best average performance
 
@@ -20,8 +30,13 @@ replaceWorst :: HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulatio
 replaceWorst hPop childs mutoids = (drop (length childs + length mutoids) (reverse (sortByAverageScore hPop))) ++ childs ++ mutoids
 
 -- REPRODUCTION
-reproductionStep :: HeuristicPopulation -> HeuristicPopulation
-reproductionStep hPop = applyChildren (generateChildren (selectParents hPop))
+reproductionStep :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+-- reproductionStep hPop = applyChildren (generateChildren (selectParents hPop))
+reproductionStep set = do
+                    -- Get children as a list rather than tuple
+                    pop <- set
+                    let children = generateChildren (selectParents pop)
+                    applyPopulation (return children)
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
 selectParents hPop = tournamentSelection hPop 3
@@ -49,8 +64,10 @@ getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSiz
                                 where
                                     randomisedList = randomiseList seed xs
 
-generateChildren :: (Heuristic, Heuristic) -> (Heuristic, Heuristic)
-generateChildren (p1, p2) = kPointCrossover (p1, p2) 1 (getSeed p1)
+generateChildren :: (Heuristic, Heuristic) -> HeuristicPopulation
+generateChildren (p1, p2) = [(c1, (0,0)), (c2, (0,0))]
+                            where
+                              (c1, c2) = kPointCrossover (p1, p2) 1 (getSeed p1)
 
 kPointCrossover :: (Heuristic, Heuristic) -> Int -> Int -> (Heuristic, Heuristic)
 kPointCrossover x 0 _ = x
@@ -64,28 +81,26 @@ onePointCrossover (h1, h2) seed = (
                                   ) where
                                     i = getRandomIndex seed h1
 
---Produces a HeuristicPopulation of length 2 after running each child once
-applyChildren :: (Heuristic, Heuristic) -> HeuristicPopulation
-applyChildren (c1, c2) = [(c1, (applyHeuristic c1, 1)), (c2, (applyHeuristic c2, 1))]
-
 -- MUTATION
-mutationStep :: HeuristicPopulation -> HeuristicPopulation
-mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
+mutationStep :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+-- mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
+mutationStep set = do
+                pop <- set
+                let mutoid = mutateHeuristic (selectHeuristicToMutate pop)
+                applyPopulation (return mutoid)
+
 
 selectHeuristicToMutate :: HeuristicPopulation -> Heuristic
 selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (getSeed (fst (head hPop))) hPop))
 
-mutateHeuristic :: Heuristic -> Heuristic
-mutateHeuristic h = flipRandomBit h
+mutateHeuristic :: Heuristic -> HeuristicPopulation
+mutateHeuristic h = [(flipRandomBit h, (0,0))]
 
 flipRandomBit :: Heuristic -> Heuristic
 flipRandomBit h = take i h ++ [bit] ++ drop (i+1) h
                 where
                     bit = if (h !! i) == '0' then '1' else '0'
                     i = getRandomIndex (getSeed h) h
-
-applyMutoid :: Heuristic -> HeuristicPopulation
-applyMutoid m = [(m, (applyHeuristic m, 1))]
 
 -- HELPERS
 -- helper function to sort the population by s/r descending
