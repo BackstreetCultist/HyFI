@@ -6,22 +6,17 @@ import HyperHeuristicTypes
 import RandomOperators (heuristicToSeed)
 import Solution (applyHeuristicRepresentationToPopulation, SolutionPopulation)
 
-applyPopulation :: (HeuristicPopulation, SolutionPopulation) -> (HeuristicPopulation, SolutionPopulation)
--- -- applyPopulation (hs, ss) = [(h, ((s + (applyHeuristic h)), (r+1))) | (h, (s, r)) <- hs]
-applyPopulation ([], ss) = ([],ss)
--- applyPopulation ((h, (s,r):hs, ss) = ((h, ((s + s'), (r+1))), ss') : applyPopulation (hs,ss')
-applyPopulation ((h, (s,r)):hs, ss) = ((h, ((s + s'), (r+1))) : hs', ss'')
-                            where
-                                (hs', ss'') = applyPopulation (hs,ss')
-                                (ss', s') = applyHeuristic h ss
-
--- apply a heuristic and get back a score for that run
--- this is where we call in to the solution layer
--- the score is calculated as the average of the scores recieved from that layer
-applyHeuristic :: Heuristic -> SolutionPopulation -> (SolutionPopulation, Int)
-applyHeuristic h ss =  (fst x, avg (snd x))
-                    where
-                        x = unzip (applyHeuristicRepresentationToPopulation h ss)
+applyPopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+applyPopulation set = do
+                    ss <- get
+                    let hs' = evalState set ss
+                    if hs' == [] then
+                        return hs'
+                    else do
+                        let ((h, (s,r)):hs) = hs'
+                        let x = unzip (applyHeuristicRepresentationToPopulation h ss)
+                        put (fst x)
+                        return $! (h, (s + avg (snd x), r+1)) : (evalState (applyPopulation (return hs)) (fst x))
 
 avg :: [Int] -> Int
 avg [] = 0
