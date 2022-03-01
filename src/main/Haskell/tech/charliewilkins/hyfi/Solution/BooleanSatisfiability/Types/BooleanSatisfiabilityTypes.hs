@@ -1,7 +1,7 @@
 module BooleanSatisfiabilityTypes where
 
 type HeuristicRepresentation = [Char]
-type Operator = Solution -> OperatorMagnitude -> Solution
+type Operator = Solution -> OperatorMagnitude -> Instance -> Solution
 type OperatorMagnitude = Int
 type OperatorClass = [Operator]
 type Evaluator = Solution -> Solution -> Instance -> Int

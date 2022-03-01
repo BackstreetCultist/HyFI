@@ -13,6 +13,10 @@ import HyperHeuristicTypes
 getSeed :: Heuristic -> Int
 getSeed h = heuristicToSeed h + unsafePerformIO posixNanosInt
 
+-- Get seed without heuristic value
+getSeed' :: Int
+getSeed' = unsafePerformIO posixNanosInt
+
 -- Used to get seeds for random generators
 -- Since a heuristic is a binary string, we can take its denary value
 heuristicToSeed :: Heuristic -> Int
