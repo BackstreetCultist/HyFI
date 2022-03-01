@@ -1,0 +1,14 @@
+Problem files given in form of SATLIB/DIMACS format (https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
+Preamble contains n lines beginning with c which are comments,
+followed by one line beginning with p which describes the problem
+
+Problem line contains two numerical variables.
+    1st - number of variables
+    2nd - number of clauses
+Extant variables are 1-n (there is no 0 var)
+    So we'll need to give all indexes as +1
+
+A clause line is a number of variables followed by a zero
+    I don't know what the zero is for
+If a variable is preceeded by a minus sign,
+that variable is negated in the clause

@@ -1,0 +1,3 @@
+module BooleanSatisfiabilityAcceptors where
+
+import BooleanSatisfiabilityTypes
