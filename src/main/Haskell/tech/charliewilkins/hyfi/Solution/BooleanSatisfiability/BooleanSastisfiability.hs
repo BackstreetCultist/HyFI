@@ -6,26 +6,21 @@ import System.IO.Unsafe (unsafePerformIO)
 import System.Random (randomRs, mkStdGen)
 
 import BooleanSatisfiabilityTypes
+import BooleanSatisfiabilityOperators (flipRandomVariable, flipRandomVariableFromBrokenClause)
+import BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor)
+import BooleanSatisfiabilityEvaluators (newObjectiveValue, improvement)
 
---TODO specify
-import BooleanSatisfiabilityOperators
---TODO specify
-import BooleanSatisfiabilityAcceptors
---TODO specify
-import BooleanSatisfiabilityEvaluators
-
---TODO fill
 generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
--- --TODO fill
--- getOperatorsByClass :: [[Operator]]
+getOperatorsByClass :: [[Operator]]
+getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause]]
 
--- --TODO fill
--- getAcceptors :: [Acceptor]
+getAcceptors :: [Acceptor]
+getAcceptors = [naiveAcceptor, improvingAcceptor]
 
--- --TODO fill
--- getEvaluators :: [Evaluator]
+getEvaluators :: [Evaluator]
+getEvaluators = [newObjectiveValue, improvement]
 
 getProblemInstance :: String -> Instance
 getProblemInstance file = unsafePerformIO (loadProblemInstance file)
@@ -50,3 +45,6 @@ getClauses :: [String] -> [[Int]]
 getClauses [] = []
 getClauses (line:lines) | ((head line) /= 'p' && (head line /= 'c')) = [init (map read (words line) :: [Int])] ++ getClauses lines
                         | otherwise = getClauses lines
+
+getObjectiveValue :: Evaluator
+getObjectiveValue = newObjectiveValue

@@ -8,7 +8,7 @@ import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
 import HyperHeuristicTypes (HeuristicPopulation)
-import Solution (generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
+import Solution (getInstance, generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
 
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs
@@ -26,7 +26,7 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                                                             print hs
                                                                                             print "************************************"
                                                                                             print "*** NEW SOLUTION POPULATION ***"
-                                                                                            print ss
+                                                                                            print (snd ss)
                                                                                             print "***********************************"
                                                                                             print ()
 
@@ -35,14 +35,15 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                         return (detach set initialSs)
 
 main s t = do
-    let initialSolutionPopulation = generateSolutionPopulationOfSize 8 s
+    let i = getInstance "t7pm3-9999.spn.txt"
+    let initialSolutionPopulation = generateSolutionPopulationOfSize 8 s i
     let initialHeuristicPopulation = generateHeuristicPopulationOfSize 8 (s+1)
 
     print "*** INITIAL HEURISTIC POPULATION ***"
     print initialHeuristicPopulation
     print "************************************"
     print "*** INITIAL SOLUTION POPULATION ***"
-    print initialSolutionPopulation
+    print (snd initialSolutionPopulation)
     print "***********************************"
 
     startTime <- getCurrentTime
@@ -58,9 +59,13 @@ main s t = do
     print finalHeuristicPopulation
     print "**********************************"
     print "*** FINAL SOLUTION POPULATION ***"
-    print finalSolutionPopulation
+    print (snd finalSolutionPopulation)
     print "*********************************"
     print "*** FINAL SOLUTION VALUES ***"
-    print (map evaluateSolution finalSolutionPopulation)
+    print (map (\x -> evaluateSolution x (fst finalSolutionPopulation)) (snd finalSolutionPopulation))
     print "*****************************"
     print "Bye!"
+    print "..."
+    print "Hang on"
+    print "One final check"
+    print ((fst finalSolutionPopulation) == i)

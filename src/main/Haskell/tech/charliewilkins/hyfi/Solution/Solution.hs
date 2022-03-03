@@ -6,20 +6,26 @@ import Data.List (foldl')
 
 import HyperHeuristicTypes
 
-import ExampleProblem (generator, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
-import ExampleProblemTypes
+import BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+import BooleanSatisfiabilityTypes
 
 -- Application needs this on other side
-type SolutionPopulation = [Solution]
+type SolutionPopulation = (Instance, [Solution])
 
 -- STARTUP --------------------------------------------------------------------
 
-generateSolution :: Int -> Solution
-generateSolution seed = generator seed
+getInstance :: String -> Instance
+getInstance = getProblemInstance
 
-generateSolutionPopulationOfSize :: Int -> Int -> [Solution]
-generateSolutionPopulationOfSize 0 _ = []
-generateSolutionPopulationOfSize n seed = generateSolution seed : generateSolutionPopulationOfSize (n-1) (seed+1)
+generateSolution :: Int -> Instance -> Solution
+generateSolution = generator
+
+generateSolutionList :: Int -> Int -> Instance -> [Solution]
+generateSolutionList 0 _ i = []
+generateSolutionList n seed i = generateSolution seed i : generateSolutionList (n-1) (seed+1) i
+
+generateSolutionPopulationOfSize :: Int -> Int -> Instance -> SolutionPopulation
+generateSolutionPopulationOfSize n seed i = (i, generateSolutionList n seed i)
 
 -- BUILDING HEURISTIC ---------------------------------------------------------
 
@@ -61,15 +67,15 @@ binaryVal xs = foldl' (\acc x -> acc * 2 + digitToInt x) 0 xs
 -- RUNNING HEURISTIC ----------------------------------------------------------
 
 -- Returns a list of new solutions with their scores according to the heuristic
-applyHeuristicRepresentationToPopulation :: HeuristicRepresentation -> [Solution] -> [(Solution, Int)]
-applyHeuristicRepresentationToPopulation h sPop = map (runHeuristic (buildHeuristic h)) sPop
+applyHeuristicRepresentationToPopulation :: HeuristicRepresentation -> SolutionPopulation -> [(Solution, Int)]
+applyHeuristicRepresentationToPopulation h (i, ss) = map (runHeuristic (buildHeuristic h) i) ss
 
-runHeuristic :: BuiltHeuristic -> Solution -> (Solution, Int)
-runHeuristic (op, opMag, acc, eval) s = (s'', eval s s'')
+runHeuristic :: BuiltHeuristic -> Instance -> Solution -> (Solution, Int)
+runHeuristic (op, opMag, acc, eval) i s = (s'', eval s s'' i)
                                     where
-                                        s' = op s opMag
-                                        s'' = if (acc s s') then s' else s
+                                        s' = op s opMag i
+                                        s'' = if (acc s s' i) then s' else s
 
 -- EVALUATING SOLUTION --------------------------------------------------------
-evaluateSolution :: Solution -> Int
-evaluateSolution s = getObjectiveValue [] s
+evaluateSolution :: Solution -> Instance -> Int
+evaluateSolution s i = getObjectiveValue [] s i
