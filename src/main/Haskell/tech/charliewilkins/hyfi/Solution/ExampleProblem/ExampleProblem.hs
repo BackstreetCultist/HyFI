@@ -18,3 +18,6 @@ getAcceptors = [naiveAcceptor, improvingAcceptor]
 
 getEvaluators :: [Evaluator]
 getEvaluators = [newObjectiveValue, improvement, valueDistance, searchSpaceDistance]
+
+getObjectiveValue :: Evaluator
+getObjectiveValue = newObjectiveValue

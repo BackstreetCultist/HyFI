@@ -6,7 +6,7 @@ import Data.List (foldl')
 
 import HyperHeuristicTypes
 
-import ExampleProblem (generator, getOperatorsByClass, getEvaluators, getAcceptors)
+import ExampleProblem (generator, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
 import ExampleProblemTypes
 
 -- Application needs this on other side
@@ -69,3 +69,7 @@ runHeuristic (op, opMag, acc, eval) s = (s'', eval s s'')
                                     where
                                         s' = op s opMag
                                         s'' = if (acc s s') then s' else s
+
+-- EVALUATING SOLUTION --------------------------------------------------------
+evaluateSolution :: Solution -> Int
+evaluateSolution s = getObjectiveValue [] s
