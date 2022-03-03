@@ -9,6 +9,7 @@ type Evaluator = Solution -> Solution -> Instance -> Int
 type Acceptor = Solution -> Solution -> Bool
 type BuiltHeuristic = (Operator, OperatorMagnitude, Acceptor, Evaluator)
 
-type Solution = [Bool]
+type Solution = [Char]
+-- We will take 1 to be True and 0 to be False as per convention
 type Instance = (Int, [[Int]])
 -- Number of variables followed by set of clauses

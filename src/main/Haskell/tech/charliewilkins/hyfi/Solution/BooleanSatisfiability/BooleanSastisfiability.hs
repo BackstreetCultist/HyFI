@@ -16,7 +16,7 @@ import BooleanSatisfiabilityEvaluators
 
 --TODO fill
 generator :: Int -> Instance -> Solution
-generator s i = take (fst i) (randomRs (False, True) (mkStdGen s))
+generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
 -- --TODO fill
 -- getOperatorsByClass :: [[Operator]]

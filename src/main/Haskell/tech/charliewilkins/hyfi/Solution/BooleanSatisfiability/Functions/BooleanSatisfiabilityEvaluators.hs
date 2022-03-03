@@ -12,5 +12,5 @@ evaluateClause sol clause = if sum (map (checkVar sol) clause) == length clause 
 -- Returns 1 if the variable is met, and 0 otherwise
 -- The var may be negative, in which case we expect it to be False
 checkVar :: Solution -> Int -> Int
-checkVar sol var | (var > 0) = if sol !! ((abs var)-1) then 1 else 0
-                 | otherwise = if sol !! ((abs var)-1) then 0 else 1
+checkVar sol var | (var > 0) = if (sol !! ((abs var)-1) == '1') then 1 else 0
+                 | otherwise = if (sol !! ((abs var)-1) == '1') then 0 else 1
