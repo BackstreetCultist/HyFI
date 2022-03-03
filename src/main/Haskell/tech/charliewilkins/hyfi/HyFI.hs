@@ -8,7 +8,7 @@ import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
 import HyperHeuristicTypes (HeuristicPopulation)
-import Solution (generateSolutionPopulationOfSize, SolutionPopulation)
+import Solution (generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
 
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs
@@ -17,7 +17,7 @@ detach :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> 
 detach set sPop = runState set sPop
 
 coreLoop :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO ((HeuristicPopulation, SolutionPopulation))
-coreLoop set initialSs startTime currentTime limit    | ((diffUTCTime currentTime startTime) <= limit) = do
+coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime startTime) <= limit) = do
                                                                                             newTime <- getCurrentTime
                                                                                             let (hs, ss) = detach (runHeuristic set) initialSs
 
@@ -31,8 +31,8 @@ coreLoop set initialSs startTime currentTime limit    | ((diffUTCTime currentTim
                                                                                             print ()
 
                                                                                             coreLoop (attach hs ss) ss startTime newTime limit
-                                            | otherwise = do
-                                                return (detach set initialSs)
+                                                    | otherwise = do
+                                                        return (detach set initialSs)
 
 main s t = do
     let initialSolutionPopulation = generateSolutionPopulationOfSize 8 s
@@ -60,4 +60,7 @@ main s t = do
     print "*** FINAL SOLUTION POPULATION ***"
     print finalSolutionPopulation
     print "*********************************"
+    print "*** FINAL SOLUTION VALUES ***"
+    print (map evaluateSolution finalSolutionPopulation)
+    print "*****************************"
     print "Bye!"
