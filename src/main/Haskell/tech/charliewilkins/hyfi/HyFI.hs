@@ -6,9 +6,9 @@ import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 
 import System.IO.Unsafe (unsafePerformIO)
 
-import HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
-import HyperHeuristicTypes (HeuristicPopulation)
-import Solution (getInstance, generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
+import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
+import HyperHeuristic.Types.HyperHeuristicTypes (HeuristicPopulation)
+import Solution.Solution (getInstance, generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
 
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs

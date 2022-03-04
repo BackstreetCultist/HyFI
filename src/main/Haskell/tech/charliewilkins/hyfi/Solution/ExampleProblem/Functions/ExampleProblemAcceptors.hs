@@ -1,7 +1,7 @@
-module ExampleProblemAcceptors where
+module Solution.ExampleProblem.Functions.ExampleProblemAcceptors where
 
-import ExampleProblemTypes
-import ExampleProblemEvaluators
+import Solution.ExampleProblem.Types.ExampleProblemTypes
+import Solution.ExampleProblem.Functions.ExampleProblemEvaluators
 
 naiveAcceptor :: Acceptor
 naiveAcceptor _ _ = True

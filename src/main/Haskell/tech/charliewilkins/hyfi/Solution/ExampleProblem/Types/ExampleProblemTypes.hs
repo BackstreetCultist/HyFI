@@ -1,4 +1,4 @@
-module ExampleProblemTypes where
+module Solution.ExampleProblem.Types.ExampleProblemTypes where
 
 type HeuristicRepresentation = [Char]
 type Operator = Solution -> OperatorMagnitude -> Solution

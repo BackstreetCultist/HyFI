@@ -1,14 +1,14 @@
-module BooleanSatisfiability where
+module Solution.BooleanSatisfiability.BooleanSatisfiability where
 
 import System.Directory
 import System.IO
 import System.IO.Unsafe (unsafePerformIO)
 import System.Random (randomRs, mkStdGen)
 
-import BooleanSatisfiabilityTypes
-import BooleanSatisfiabilityOperators (flipRandomVariable, flipRandomVariableFromBrokenClause)
-import BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor)
-import BooleanSatisfiabilityEvaluators (newObjectiveValue, improvement)
+import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityOperators (flipRandomVariable, flipRandomVariableFromBrokenClause)
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor)
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (newObjectiveValue, improvement)
 
 generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
@@ -27,7 +27,7 @@ getProblemInstance file = unsafePerformIO (loadProblemInstance file)
 
 loadProblemInstance :: String -> IO (Instance)
 loadProblemInstance file = do
-                        let filePath =  "Instances/MAXSAT/" ++ file
+                        let filePath =  "Solution/BooleanSatisfiability/Instances/" ++ file
                         print filePath
                         handle <- openFile filePath ReadMode
                         contents <- hGetContents handle

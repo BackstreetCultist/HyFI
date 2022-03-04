@@ -1,14 +1,14 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-module HyperHeuristic where
+module HyperHeuristic.HyperHeuristic where
 
 import Control.Monad.State
 
 import System.Random (randomRs, mkStdGen)
 
-import HyperHeuristicTypes
-import Application (applyPopulation)
-import Evolution (evolvePopulation)
-import Solution (SolutionPopulation)
+import HyperHeuristic.Types.HyperHeuristicTypes
+import HyperHeuristic.Functions.Application (applyPopulation)
+import HyperHeuristic.Functions.Evolution (evolvePopulation)
+import Solution.Solution (SolutionPopulation)
 
 -- STARTUP --------------------------------------------------------------------
 

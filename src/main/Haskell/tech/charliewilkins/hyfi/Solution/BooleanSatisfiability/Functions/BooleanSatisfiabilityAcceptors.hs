@@ -1,7 +1,7 @@
-module BooleanSatisfiabilityAcceptors where
+module Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors where
 
-import BooleanSatisfiabilityTypes
-import BooleanSatisfiabilityEvaluators (improvement)
+import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (improvement)
 
 naiveAcceptor :: Acceptor
 naiveAcceptor _ _ _ = True

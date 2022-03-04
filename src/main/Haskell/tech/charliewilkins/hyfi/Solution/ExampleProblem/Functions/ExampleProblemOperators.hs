@@ -1,7 +1,7 @@
-module ExampleProblemOperators where
+module Solution.ExampleProblem.Functions.ExampleProblemOperators where
 
-import RandomOperators (getSeed, getRandomIndex)
-import ExampleProblemTypes
+import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed, getRandomIndex)
+import Solution.ExampleProblem.Types.ExampleProblemTypes
 
 -- LOCAL SEARCH ---------------------------------------------------------------
 randomBitFlip :: Solution -> OperatorMagnitude -> Solution

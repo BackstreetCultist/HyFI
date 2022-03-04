@@ -1,10 +1,10 @@
-module Application where
+module HyperHeuristic.Functions.Application where
 
 import Control.Monad.State
 
-import HyperHeuristicTypes
-import RandomOperators (heuristicToSeed)
-import Solution (applyHeuristicRepresentationToPopulation, SolutionPopulation)
+import HyperHeuristic.Types.HyperHeuristicTypes
+import HyperHeuristic.Functions.Helpers.RandomOperators (heuristicToSeed)
+import Solution.Solution (applyHeuristicRepresentationToPopulation, SolutionPopulation)
 
 applyPopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
 applyPopulation set = do

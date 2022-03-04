@@ -1,13 +1,13 @@
-module Evolution where
+module HyperHeuristic.Functions.Evolution where
 
 import Control.Monad.State
 
 import Data.List (sort)
 
-import HyperHeuristicTypes
-import RandomOperators (getSeed, randomiseList, getRandomIndex)
-import Application (applyPopulation)
-import Solution (SolutionPopulation)
+import HyperHeuristic.Types.HyperHeuristicTypes
+import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed, randomiseList, getRandomIndex)
+import HyperHeuristic.Functions.Application (applyPopulation)
+import Solution.Solution (SolutionPopulation)
 
 -- Control function for this section
 evolvePopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation

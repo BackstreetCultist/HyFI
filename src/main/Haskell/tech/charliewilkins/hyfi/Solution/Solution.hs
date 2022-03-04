@@ -1,13 +1,13 @@
-module Solution where
+module Solution.Solution where
 
 import Data.Typeable
 import Data.Char (digitToInt)
 import Data.List (foldl')
 
-import HyperHeuristicTypes
+import HyperHeuristic.Types.HyperHeuristicTypes
 
-import BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
-import BooleanSatisfiabilityTypes
+import Solution.BooleanSatisfiability.BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
 
 -- Application needs this on other side
 type SolutionPopulation = (Instance, [Solution])

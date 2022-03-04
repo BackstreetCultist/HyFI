@@ -1,9 +1,9 @@
-module ExampleProblemEvaluators where
+module Solution.ExampleProblem.Functions.ExampleProblemEvaluators where
 
 import Data.Char (digitToInt)
 import Data.List (foldl')
 
-import ExampleProblemTypes
+import Solution.ExampleProblem.Types.ExampleProblemTypes
 
 -- TODO do these need normalising somehow?
 
