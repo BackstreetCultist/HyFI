@@ -43,7 +43,7 @@ main s t = do
     print initialHeuristicPopulation
     print "************************************"
     print "*** INITIAL SOLUTION POPULATION ***"
-    print (snd initialSolutionPopulation)
+    print (map (\x -> evaluateSolution x (fst initialSolutionPopulation)) (snd initialSolutionPopulation))
     print "***********************************"
 
     startTime <- getCurrentTime
