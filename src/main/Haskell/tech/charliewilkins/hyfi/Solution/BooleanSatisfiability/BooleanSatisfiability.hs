@@ -7,8 +7,8 @@ import System.Random (randomRs, mkStdGen)
 
 import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
 import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityOperators (flipRandomVariable, flipRandomVariableFromBrokenClause)
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor)
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (newObjectiveValue, improvement)
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
+import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (newObjectiveValue, newPercentageCorrect, improvement)
 
 generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
@@ -17,10 +17,11 @@ getOperatorsByClass :: [[Operator]]
 getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause]]
 
 getAcceptors :: [Acceptor]
-getAcceptors = [naiveAcceptor, improvingAcceptor]
+getAcceptors = [naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor]
 
+-- This doesn't export newObjectiveValue as the values it produces are so much bigger than the others
 getEvaluators :: [Evaluator]
-getEvaluators = [newObjectiveValue, improvement]
+getEvaluators = [newPercentageCorrect, improvement]
 
 getProblemInstance :: String -> Instance
 getProblemInstance file = unsafePerformIO (loadProblemInstance file)

@@ -18,3 +18,8 @@ checkVar sol var | (var > 0) = if (sol !! ((abs var)-1) == '1') then 1 else 0
 -- Second clause evaluates old solution
 improvement :: Evaluator
 improvement old new i = (newObjectiveValue old new i ) - (newObjectiveValue new old i)
+
+newPercentageCorrect :: Evaluator
+newPercentageCorrect _ s i = floor (((fromIntegral correct :: Double) / (fromIntegral (length (snd i) ) :: Double)) * 100)
+                        where
+                            correct = newObjectiveValue [] s i
