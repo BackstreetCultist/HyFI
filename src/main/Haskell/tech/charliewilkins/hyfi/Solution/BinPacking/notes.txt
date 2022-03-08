@@ -1,0 +1,4 @@
+Preamble - two lines of problem description
+Description - begins with space (" ")
+            - first number is bin capacity, second is number of objects
+What follows is a list of variables with weights

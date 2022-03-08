@@ -6,8 +6,11 @@ import Data.List (foldl')
 
 import HyperHeuristic.Types.HyperHeuristicTypes
 
-import Solution.BooleanSatisfiability.BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
-import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+-- import Solution.BooleanSatisfiability.BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+-- import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+
+import Solution.BinPacking.BinPacking
+import Solution.BinPacking.Types.BinPackingTypes
 
 -- Application needs this on other side
 type SolutionPopulation = (Instance, [Solution])
