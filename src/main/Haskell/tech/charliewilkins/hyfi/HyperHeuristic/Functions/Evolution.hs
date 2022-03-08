@@ -67,7 +67,7 @@ getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSiz
 generateChildren :: (Heuristic, Heuristic) -> HeuristicPopulation
 generateChildren (p1, p2) = [(c1, (0,0)), (c2, (0,0))]
                             where
-                              (c1, c2) = kPointCrossover (p1, p2) 1 (getSeed p1)
+                              (c1, c2) = kPointCrossover (p1, p2) 3 (getSeed p1)
 
 kPointCrossover :: (Heuristic, Heuristic) -> Int -> Int -> (Heuristic, Heuristic)
 kPointCrossover x 0 _ = x
@@ -94,10 +94,11 @@ selectHeuristicToMutate :: HeuristicPopulation -> Heuristic
 selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (getSeed (fst (head hPop))) hPop))
 
 mutateHeuristic :: Heuristic -> HeuristicPopulation
-mutateHeuristic h = [(flipRandomBit h, (0,0))]
+mutateHeuristic h = [(flipRandomBits 4 h, (0,0))]
 
-flipRandomBit :: Heuristic -> Heuristic
-flipRandomBit h = take i h ++ [bit] ++ drop (i+1) h
+flipRandomBits :: Int -> Heuristic -> Heuristic
+flipRandomBits 0 h = h
+flipRandomBits mag h = flipRandomBits (mag-1) (take i h ++ [bit] ++ drop (i+1) h)
                 where
                     bit = if (h !! i) == '0' then '1' else '0'
                     i = getRandomIndex (getSeed h) h
