@@ -16,6 +16,6 @@ improvingAcceptor old new i = (improvement old new i) > 0
 improvingOrChanceAcceptor :: Acceptor
 improvingOrChanceAcceptor old new i = if (improvement old new i) > 0 then True else fst (randomR (True, False) (mkStdGen (getSeed new)))
 
--- Accepts if the improvement is greater than 5% (where a perfect solution is 100%)
+-- Accepts if the improvement is greater than or equal to 5% (where a perfect solution is 100%)
 substantialImprovementAcceptor :: Acceptor
-substantialImprovementAcceptor old new i = (newPercentageCorrect [] new i) - (newPercentageCorrect [] new i) > 5
+substantialImprovementAcceptor old new i = (newPercentageCorrect [] new i) - (newPercentageCorrect [] old i) >= 5

@@ -34,3 +34,9 @@ inBrokenClause var s (_, clauses) = if length reducedClauses == sum (map (evalua
 --Remove all entries in list that i does not appear in
 reduceClauses :: Int -> [[Int]] -> [[Int]]
 reduceClauses i xs = [x | x <- xs, elem i x]
+
+reverseSolution :: Operator
+reverseSolution s _ _ = reverse s
+
+invertSolution :: Operator
+invertSolution s _ _ = [if x == '0' then '1' else '0' | x <- s]
