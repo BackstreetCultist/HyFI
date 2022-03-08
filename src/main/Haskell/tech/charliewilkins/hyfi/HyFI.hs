@@ -1,5 +1,6 @@
 module HyFI where
 
+import Control.DeepSeq (deepseq)
 import Control.Monad.State
 
 import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
@@ -13,15 +14,15 @@ import Solution.Solution (getInstance, generateSolutionPopulationOfSize, evaluat
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs
 
-detach :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> (HeuristicPopulation, SolutionPopulation)
-detach set sPop = runState set sPop
+detach :: SolutionPopulation -> State SolutionPopulation HeuristicPopulation -> (HeuristicPopulation, SolutionPopulation)
+detach sPop set = runState set sPop
 
 coreLoop :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO ((HeuristicPopulation, SolutionPopulation))
 coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime startTime) <= limit) = do
                                                                                             newTime <- getCurrentTime
-                                                                                            let (hs, ss) = detach (runHeuristic set) initialSs
+                                                                                            let (hs, ss) = detach initialSs $! runHeuristic set
 
-                                                                                            print ()
+                                                                                            deepseq (hs, ss) print ()
                                                                                             print "*** NEW HEURISTIC POPULATION ***"
                                                                                             print hs
                                                                                             print "************************************"
@@ -32,7 +33,7 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
 
                                                                                             coreLoop (attach hs ss) ss startTime newTime limit
                                                     | otherwise = do
-                                                        return (detach set initialSs)
+                                                        return (detach initialSs set)
 
 main s t = do
     let i = getInstance "hidden-k3-s0-r5-n700-01-S2069048075.sat05-488.reshuffled-07.txt"
