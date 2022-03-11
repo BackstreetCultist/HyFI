@@ -1,5 +1,7 @@
 module Solution.BinPacking.Functions.BinPackingOperators where
 
+import Data.List (sortBy)
+
 import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed', getRandomIndex, randomiseList)
 import Solution.BinPacking.Types.BinPackingTypes
 
@@ -37,6 +39,42 @@ maximisingMove seed s = tail (tail s') ++ (\x -> [fst x, snd x]) (randomMoveBetw
                                     getSemiRandomisedList seed s = if length (head (s')) < length (head (tail (s'))) then s' else getSemiRandomisedList (seed+1) s
                                                                     where
                                                                         s' = randomiseList seed s
+
+repackLowestFilled :: Operator
+repackLowestFilled s 0 _ = destroyEmpties s
+repackLowestFilled s m i = repackLowestFilled (bestFit (head s') (tail s') i) (m-1) i
+                        where
+                            s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
+-- Locate lowest filled bin
+-- Best-fit those items back into solution
+-- Destroy empties
+
+destroyHighestBins :: Operator
+destroyHighestBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
+                        where
+                            s' = sortBy (\e1 e2 -> compare (length e2) (length e1)) s
+
+destroyLowestBins :: Operator
+destroyLowestBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
+                        where
+                            s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
+
+destroyRandomBins :: Operator
+destroyRandomBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
+                        where
+                            s' = randomiseList (getSeed' + sum (head s)) s
+
+
+bestFit :: [Int] -> Solution -> Instance -> Solution
+bestFit [] s _ = s
+bestFit (x:xs) s i = bestFit xs (bestFitItem x (sortBy (\e1 e2 -> compare (length e2) (length e1)) s) i) i
+
+-- Expects an item to place, and a sorted list to place it in
+bestFitItem :: Int -> Solution -> Instance -> Solution
+bestFitItem x [] _ = [[x]]
+bestFitItem x (b:bs) i | ((sum (map (\z -> (snd i) !! z) b)) + ((snd i) !! x)) > (fst i) = b : bestFitItem x bs i
+                       | otherwise = (b ++ [x]) : bs
+
 
 destroyEmpties :: Solution -> Solution
 destroyEmpties s = filter (not . null) s

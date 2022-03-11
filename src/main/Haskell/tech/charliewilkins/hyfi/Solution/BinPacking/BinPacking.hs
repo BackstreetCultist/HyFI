@@ -7,7 +7,7 @@ import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList)
 import Solution.BinPacking.Types.BinPackingTypes
 import Solution.BinPacking.Functions.BinPackingAcceptors (naiveAcceptor, improvingAcceptor)
 import Solution.BinPacking.Functions.BinPackingEvaluators (newObjectiveValue, improvement)
-import Solution.BinPacking.Functions.BinPackingOperators (randomPlace, maximisingPlace)
+import Solution.BinPacking.Functions.BinPackingOperators (randomPlace, maximisingPlace, repackLowestFilled, destroyHighestBins, destroyLowestBins, destroyRandomBins)
 
 generator :: Int -> Instance -> Solution
 generator seed i = firstFit [[]] (randomiseList seed (take (length (snd i)) [0..])) i
@@ -37,7 +37,8 @@ loadProblemInstance file = do
                     return (limit,clauses)
 
 getOperatorsByClass :: [[Operator]]
-getOperatorsByClass = [[randomPlace, maximisingPlace]]
+getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [destroyHighestBins, destroyLowestBins, destroyRandomBins]]
+-- getOperatorsByClass = [[repackLowestFilled]]
 
 getEvaluators :: [Evaluator]
 getEvaluators = [improvement]
