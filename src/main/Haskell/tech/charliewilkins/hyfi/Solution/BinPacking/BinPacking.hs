@@ -5,6 +5,7 @@ import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList)
 import Solution.BinPacking.Types.BinPackingTypes
+import Solution.BinPacking.Functions.BinPackingEvaluators (newObjectiveValue)
 
 generator :: Int -> Instance -> Solution
 generator seed i = firstFit [[]] (randomiseList seed (take (length (snd i)) [0..])) i
@@ -33,19 +34,11 @@ loadProblemInstance file = do
                     hClose handle
                     return (limit,clauses)
 
--- getNumberOfVars :: [String] -> Int
--- getNumberOfVars (line:lines) | (head line) == 'p' = read ((words line) !! 2) :: Int
---                              | otherwise = getNumberOfVars lines
-
--- getClauses :: [String] -> [[Int]]
--- getClauses [] = []
--- getClauses (line:lines) | ((head line) /= 'p' && (head line /= 'c')) = [init (map read (words line) :: [Int])] ++ getClauses lines
---                         | otherwise = getClauses lines
-
 -- getOperatorsByClass :: [[Operator]]
 
 -- getEvaluators :: [Evaluator]
 
 -- getAcceptors :: [Acceptor]
 
--- getObjectiveValue :: Evaluator
+getObjectiveValue :: Evaluator
+getObjectiveValue = newObjectiveValue
