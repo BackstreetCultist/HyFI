@@ -36,7 +36,7 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                         return (detach initialSs set)
 
 main s t = do
-    let i = getInstance "hidden-k3-s0-r5-n700-01-S2069048075.sat05-488.reshuffled-07.txt"
+    let i = getInstance "falk1000-1.txt"
     let initialSolutionPopulation = generateSolutionPopulationOfSize 8 s i
     let initialHeuristicPopulation = generateHeuristicPopulationOfSize 8 (s+1)
 
