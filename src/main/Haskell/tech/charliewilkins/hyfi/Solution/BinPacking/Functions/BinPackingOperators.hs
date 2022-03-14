@@ -64,7 +64,6 @@ destroyRandomBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s
                         where
                             s' = randomiseList (getSeed' + sum (head s)) s
 
-
 bestFit :: [Int] -> Solution -> Instance -> Solution
 bestFit [] s _ = s
 bestFit (x:xs) s i = bestFit xs (bestFitItem x (sortBy (\e1 e2 -> compare (length e2) (length e1)) s) i) i
