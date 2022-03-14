@@ -7,4 +7,4 @@ naiveAcceptor :: Acceptor
 naiveAcceptor _ _ _ = True
 
 improvingAcceptor :: Acceptor
-improvingAcceptor old new i = (improvement old new i) < 0
+improvingAcceptor old new i = (improvement old new i) > 0

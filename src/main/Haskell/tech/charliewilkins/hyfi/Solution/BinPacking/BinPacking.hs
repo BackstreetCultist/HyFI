@@ -6,7 +6,7 @@ import System.IO.Unsafe (unsafePerformIO)
 import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList)
 import Solution.BinPacking.Types.BinPackingTypes
 import Solution.BinPacking.Functions.BinPackingAcceptors (naiveAcceptor, improvingAcceptor)
-import Solution.BinPacking.Functions.BinPackingEvaluators (newObjectiveValue, improvement)
+import Solution.BinPacking.Functions.BinPackingEvaluators (newObjectiveValue, improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease)
 import Solution.BinPacking.Functions.BinPackingOperators (randomPlace, maximisingPlace, repackLowestFilled, destroyHighestBins, destroyLowestBins, destroyRandomBins)
 
 generator :: Int -> Instance -> Solution
@@ -41,7 +41,7 @@ getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [de
 -- getOperatorsByClass = [[repackLowestFilled]]
 
 getEvaluators :: [Evaluator]
-getEvaluators = [improvement]
+getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
 
 getAcceptors :: [Acceptor]
 getAcceptors = [naiveAcceptor, improvingAcceptor]
