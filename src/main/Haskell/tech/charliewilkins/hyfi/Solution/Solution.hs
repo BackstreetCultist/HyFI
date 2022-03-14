@@ -71,10 +71,11 @@ applyHeuristicRepresentationToPopulation :: HeuristicRepresentation -> SolutionP
 applyHeuristicRepresentationToPopulation h (i, ss) = map (runHeuristic (buildHeuristic h) i) ss
 
 runHeuristic :: BuiltHeuristic -> Instance -> Solution -> (Solution, Int)
-runHeuristic (op, opMag, acc, eval) i s = (s'', eval s s'' i)
+runHeuristic (op, opMag, acc, eval) i s = (s'', if not accepted then -1 else eval s s'' i)
                                     where
                                         s' = op s opMag i
-                                        s'' = if (acc s s' i) then s' else s
+                                        accepted = (acc s s' i)
+                                        s'' = if accepted then s' else s
 
 -- EVALUATING SOLUTION --------------------------------------------------------
 evaluateSolution :: Solution -> Instance -> Int
