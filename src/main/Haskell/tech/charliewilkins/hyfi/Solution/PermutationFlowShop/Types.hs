@@ -9,5 +9,7 @@ type Evaluator = Solution -> Solution -> Instance -> Int
 type Acceptor = Solution -> Solution -> Instance -> Bool
 type BuiltHeuristic = (Operator, OperatorMagnitude, Acceptor, Evaluator)
 
-type Solution =
-type Instance =
+type Solution = [Int]
+-- A list of jobs in the order they will be processed
+type Instance = [[Int]]
+-- A list of machines, with each machine represented by the time each job requires it 

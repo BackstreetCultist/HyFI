@@ -1,0 +1,10 @@
+Folder address in form n*m
+    n is the number of jobs
+    m is the number of machines
+So first folder contains examples with 100 jobs on 20 machines
+
+m-1 lines with n words followed by 1 much longer line
+"The job processing times on all instances are uniformly distributed random integers in the range [1,99]"
+So in line m, word [n] indicates the time job n will take on machine m
+
+But what is the bottom line for?

@@ -1,3 +1,3 @@
-module Solution.PersonnelScheduling.Functions.Evaluators where
+module Solution.PermutationFlowShop.Functions.Evaluators where
 
-import Solution.PersonnelScheduling.Types
+import Solution.PermutationFlowShop.Types

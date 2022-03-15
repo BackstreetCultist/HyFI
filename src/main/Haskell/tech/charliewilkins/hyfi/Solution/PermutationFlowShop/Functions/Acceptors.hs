@@ -1,3 +1,3 @@
-module Solution.PersonnelScheduling.Functions.Acceptors where
+module Solution.PermutationFlowShop.Functions.Acceptors where
 
-import Solution.PersonnelScheduling.Types
+import Solution.PermutationFlowShop.Types
