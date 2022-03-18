@@ -4,5 +4,10 @@
 .project
 .settings/
 .idea/
+
+-- Compiled files
 *.o
 *.hi
+
+-- Executable
+/src/main/Haskell/tech/charliewilkins/hyfi/HyFI
