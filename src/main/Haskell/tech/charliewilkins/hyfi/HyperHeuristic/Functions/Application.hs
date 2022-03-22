@@ -4,20 +4,14 @@ import Control.Monad.State
 
 import HyperHeuristic.Types.HyperHeuristicTypes
 import HyperHeuristic.Functions.Helpers.RandomOperators (heuristicToSeed)
-import Solution.Solution (applyHeuristicRepresentationToPopulation, SolutionPopulation)
+import Solution.Solution (applyHeuristicRepresentationToSolutions, SolutionPopulation)
 
 applyPopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
 applyPopulation set = do
-                    (i, ss) <- get
-                    let hs' = evalState set (i, ss)
-                    if hs' == [] then
-                        return hs'
-                    else do
-                        let ((h, (s,r)):hs) = hs'
-                        let x = unzip (applyHeuristicRepresentationToPopulation h (i, ss))
-                        put (i, (fst x))
-                        return $! (h, (s + avg (snd x), r+1)) : (evalState (applyPopulation (return hs)) (i, (fst x)))
-
-avg :: [Int] -> Int
-avg [] = 0
-avg xs = (sum xs) `div` (length xs)
+                    (i, sss) <- get
+                    let hs = evalState set (i, sss)
+                    let results = map (\x -> applyHeuristicRepresentationToSolutions (fst (fst x)) i (snd x)) (zip hs sss) -- [[(Solution, Int)]]
+                    let hs' = map (\((h, (s,r)), result) -> (h, (s + sum (snd (unzip result)), r+1))) (zip hs results) -- HeuristicPopulation
+                    let sss' = (map fst (map unzip results)) -- [[Solution, Int]] -> [[Solution]]
+                    put (i, (sss' ++ (drop (length sss') sss))) -- Keep any excess solution sets that were not run
+                    return hs'

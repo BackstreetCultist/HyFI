@@ -8,6 +8,7 @@ import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
+import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList, getSeed)
 import HyperHeuristic.Types.HyperHeuristicTypes (HeuristicPopulation)
 import Solution.Solution (getInstance, generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
 
@@ -23,29 +24,39 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                                                             let (hs, ss) = detach initialSs $! runHeuristic set
 
                                                                                             deepseq (hs, ss) print ()
-                                                                                            print "*** NEW HEURISTIC POPULATION ***"
-                                                                                            print hs
-                                                                                            print "************************************"
-                                                                                            print "*** NEW SOLUTION VALUES ***"
-                                                                                            print (map (\x -> evaluateSolution x (fst ss)) (snd ss))
-                                                                                            print "***********************************"
-                                                                                            print ()
+                                                                                            -- print "*** NEW HEURISTIC POPULATION ***"
+                                                                                            -- print hs
+                                                                                            -- print "************************************"
+                                                                                            -- print "*** NEW SOLUTION VALUES ***"
+                                                                                            -- print ((map.map) (\y -> evaluateSolution y (fst ss)) (snd ss))
+                                                                                            -- print "***********************************"
+                                                                                            -- print "*** RANDOMISING SOLUTION ORDER ***"
+                                                                                            let ss' = ((fst ss), (randomiseList (getSeed (fst (head hs))) (snd ss)))
+                                                                                            -- print "**********************************"
+                                                                                            -- print ()
 
-                                                                                            coreLoop (attach hs ss) ss startTime newTime limit
+                                                                                            coreLoop (attach hs ss') ss' startTime newTime limit
                                                     | otherwise = do
                                                         return (detach initialSs set)
 
 main s t f = do
     let i = getInstance f
-    let initialSolutionPopulation = generateSolutionPopulationOfSize 8 s i
+
     let initialHeuristicPopulation = generateHeuristicPopulationOfSize 8 (s+1)
+    let initialSolutionPopulation = generateSolutionPopulationOfSize ((length initialHeuristicPopulation)*2) s i
 
     print "*** INITIAL HEURISTIC POPULATION ***"
     print initialHeuristicPopulation
     print "************************************"
-    print "*** INITIAL SOLUTION POPULATION ***"
-    print (map (\x -> evaluateSolution x (fst initialSolutionPopulation)) (snd initialSolutionPopulation))
+    print "*** INITIAL SOLUTION VALUES ***"
+    print ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation))
     print "***********************************"
+    print "*** INITIAL SOLUTION AVGS ***"
+    print (map avg ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation)))
+    print "*****************************"
+    print "*** INITIAL AVERAGE AVERAGE ***"
+    print (avg (map avg ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation))))
+    print "*******************************"
 
     startTime <- getCurrentTime
     print "*** LOOPING ***"
@@ -59,14 +70,23 @@ main s t f = do
     print "*** FINAL HEURISTIC POPULATION ***"
     print finalHeuristicPopulation
     print "**********************************"
-    print "*** FINAL SOLUTION POPULATION ***"
-    print (snd finalSolutionPopulation)
-    print "*********************************"
     print "*** FINAL SOLUTION VALUES ***"
-    print (map (\x -> evaluateSolution x (fst finalSolutionPopulation)) (snd finalSolutionPopulation))
+    print ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation))
     print "*****************************"
+    print "*** FINAL SOLUTION AVGS ***"
+    print (map avg ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation)))
+    print "*****************************"
+    print "*** FINAL AVERAGE AVERAGE ***"
+    print (avg (map avg ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation))))
+    print "*******************************"
     print "Bye!"
     print "..."
     print "Hang on"
     print "One final check"
     print ((fst finalSolutionPopulation) == i)
+    print ((length initialHeuristicPopulation) == (length finalHeuristicPopulation))
+    print ((length finalSolutionPopulation) == (length finalSolutionPopulation))
+
+avg :: [Int] -> Int
+avg [] = 0
+avg xs = (sum xs) `div` (length xs)
