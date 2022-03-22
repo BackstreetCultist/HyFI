@@ -8,3 +8,10 @@ m-1 lines with n words followed by 1 much longer line
 So in line m, word [n] indicates the time job n will take on machine m
 
 But what is the bottom line for?
+
+37s
+[25,75,71,15,14,60,23,92,12,54,26,52,42,67,40,10,24,24,42,20] -> 788 (768 is start of last machine)
+
+Need to check if running the last job on the first machine results in the sum of the first machine
+	I think it should with any s
+

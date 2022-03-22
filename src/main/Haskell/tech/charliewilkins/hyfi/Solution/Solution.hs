@@ -6,8 +6,11 @@ import Data.List (foldl')
 
 import HyperHeuristic.Types.HyperHeuristicTypes
 
-import Solution.BinPacking.BinPacking (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
-import Solution.BinPacking.Types.BinPackingTypes
+-- import Solution.BinPacking.BinPacking (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+-- import Solution.BinPacking.Types.BinPackingTypes
+
+import Solution.PermutationFlowShop.Main (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+import Solution.PermutationFlowShop.Types
 
 -- Application needs this on other side
 type SolutionPopulation = (Instance, [Solution])

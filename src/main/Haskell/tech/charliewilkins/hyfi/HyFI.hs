@@ -1,5 +1,3 @@
-module HyFI where
-
 import Control.DeepSeq (deepseq)
 import Control.Monad.State
 
