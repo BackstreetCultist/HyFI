@@ -1,5 +1,7 @@
 module Solution.Solution where
 
+import Control.Parallel.Strategies (parMap, rdeepseq)
+
 import Data.Typeable
 import Data.Char (digitToInt)
 import Data.List (foldl')
@@ -73,7 +75,7 @@ binaryVal xs = foldl' (\acc x -> acc * 2 + digitToInt x) 0 xs
 -- Takes the set of solutions to apply the heuristic to
 -- Returns a list of new solutions with their scores according to the heuristic
 applyHeuristicRepresentationToSolutions :: HeuristicRepresentation -> Instance -> [Solution] -> [(Solution, Int)]
-applyHeuristicRepresentationToSolutions h i ss = map (runHeuristic (buildHeuristic h) i) ss
+applyHeuristicRepresentationToSolutions h i ss = parMap rdeepseq (runHeuristic (buildHeuristic h) i) ss
 
 runHeuristic :: BuiltHeuristic -> Instance -> Solution -> (Solution, Int)
 runHeuristic (op, opMag, acc, eval) i s = (s'', if not accepted then -1 else eval s s'' i)
