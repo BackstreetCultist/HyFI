@@ -1,10 +1,9 @@
-module HyFI where
-
 import Control.DeepSeq (deepseq)
 import Control.Monad.State
 
 import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 
+import System.IO (hFlush, stdout)
 import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
@@ -39,7 +38,13 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                     | otherwise = do
                                                         return (detach initialSs set)
 
-main s t f = do
+main :: IO ()
+main = do
+    f <- prompt "File: "
+    sS <- prompt "Seed: "
+    let s = read sS :: Int
+    tS <- prompt "Time Limit: "
+    let t = fromInteger (read tS :: Integer)
     let i = getInstance f
 
     let initialHeuristicPopulation = generateHeuristicPopulationOfSize 8 (s+1)
@@ -90,3 +95,10 @@ main s t f = do
 avg :: [Int] -> Int
 avg [] = 0
 avg xs = (sum xs) `div` (length xs)
+
+prompt :: String -> IO String
+prompt text = do
+    putStr text
+    hFlush stdout
+    getLine
+-- https://stackoverflow.com/questions/13190314/io-happens-out-of-order-when-using-getline-and-putstr
