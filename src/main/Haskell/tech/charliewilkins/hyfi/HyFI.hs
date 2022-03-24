@@ -1,6 +1,7 @@
 import Control.DeepSeq (deepseq)
 import Control.Monad.State
 
+import Data.List.Unique (sortUniq)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 
 import System.IO (hFlush, stdout)
@@ -23,6 +24,8 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                                                             let (hs, ss) = detach initialSs $! runHeuristic set
 
                                                                                             deepseq (hs, ss) print ()
+                                                                                            print "Unique heuristics: "
+                                                                                            print (length (sortUniq (map fst hs)))
                                                                                             -- print "*** NEW HEURISTIC POPULATION ***"
                                                                                             -- print hs
                                                                                             -- print "************************************"
