@@ -7,10 +7,10 @@ import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 import System.IO (hFlush, stdout)
 import System.IO.Unsafe (unsafePerformIO)
 
-import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, runHeuristic)
-import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList, getSeed)
+import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, evolvePopulation)
 import HyperHeuristic.Types.HyperHeuristicTypes (HeuristicPopulation)
-import Solution.Solution (getInstance, generateSolutionPopulationOfSize, evaluateSolution, SolutionPopulation)
+import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList, getSeed)
+import Solution.Solution (SolutionPopulation, getInstance, generateSolutionPopulationOfSize, evaluateSolution, applyPopulation)
 
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs
@@ -21,7 +21,7 @@ detach sPop set = runState set sPop
 coreLoop :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO ((HeuristicPopulation, SolutionPopulation))
 coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime startTime) <= limit) = do
                                                                                             newTime <- getCurrentTime
-                                                                                            let (hs, ss) = detach initialSs $! runHeuristic set
+                                                                                            let (hs, ss) = detach initialSs $! cyclePopulation set
 
                                                                                             deepseq (hs, ss) print ()
                                                                                             print "Unique heuristics: "
@@ -105,3 +105,9 @@ prompt text = do
     hFlush stdout
     getLine
 -- https://stackoverflow.com/questions/13190314/io-happens-out-of-order-when-using-getline-and-putstr
+
+--Wraps application and evolution into one function
+cyclePopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+cyclePopulation set = do
+                    hPop <- applyPopulation set
+                    return (evolvePopulation hPop)

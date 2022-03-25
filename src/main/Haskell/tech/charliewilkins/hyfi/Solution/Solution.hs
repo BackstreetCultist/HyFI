@@ -1,5 +1,6 @@
 module Solution.Solution where
 
+import Control.Monad.State
 import Control.Parallel.Strategies (parMap, rdeepseq)
 
 import Data.Typeable
@@ -71,6 +72,16 @@ binaryVal xs = foldl' (\acc x -> acc * 2 + digitToInt x) 0 xs
 -- https://stackoverflow.com/questions/5921573/convert-a-string-representing-a-binary-number-to-a-base-10-string-haskell
 
 -- RUNNING HEURISTIC ----------------------------------------------------------
+
+applyPopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
+applyPopulation set = do
+                    (i, sss) <- get
+                    let hs = evalState set (i, sss)
+                    let results = parMap rdeepseq (\x -> applyHeuristicRepresentationToSolutions (fst (fst x)) i (snd x)) (zip hs sss) -- [[(Solution, Int)]]
+                    let hs' = map (\((h, (s,r)), result) -> (h, (s + sum (snd (unzip result)), r+1))) (zip hs results) -- HeuristicPopulation
+                    let sss' = (map fst (map unzip results)) -- [[Solution, Int]] -> [[Solution]]
+                    put (i, (sss' ++ (drop (length sss') sss))) -- Keep any excess solution sets that were not run
+                    return hs'
 
 -- Takes the set of solutions to apply the heuristic to
 -- Returns a list of new solutions with their scores according to the heuristic
