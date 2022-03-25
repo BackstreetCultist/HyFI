@@ -14,10 +14,9 @@ import Solution.Solution (SolutionPopulation)
 evolvePopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
 -- evolvePopulation hPop = survivalStep hPop (reproductionStep hPop) (mutationStep hPop)
 evolvePopulation initialSet = do
-                    initialSolutionPopulation <- get
                     initialHeuristicPopulation <- initialSet
-                    reproductionHeuristicPopulation <- reproductionStep initialSet
-                    mutationHeuristicPopulation <- mutationStep initialSet -- No need to bind any state here as kids are not applied
+                    let reproductionHeuristicPopulation = reproductionStep initialHeuristicPopulation
+                    let mutationHeuristicPopulation = mutationStep initialHeuristicPopulation
                     return (survivalStep initialHeuristicPopulation reproductionHeuristicPopulation mutationHeuristicPopulation)
 
 -- Produces a new population of length equal to the original
@@ -31,13 +30,13 @@ replaceWorst :: HeuristicPopulation -> HeuristicPopulation -> HeuristicPopulatio
 replaceWorst hPop childs mutoids = (drop (length childs + length mutoids) (reverse (sortByAverageScore hPop))) ++ childs ++ mutoids
 
 -- REPRODUCTION
-reproductionStep :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
--- reproductionStep hPop = applyChildren (generateChildren (selectParents hPop))
-reproductionStep set = do
-                    -- Get children as a list rather than tuple
-                    pop <- set
-                    let children = generateChildren (selectParents pop)
-                    return children
+reproductionStep :: HeuristicPopulation -> HeuristicPopulation
+reproductionStep hPop = generateChildren (selectParents hPop)
+-- reproductionStep set = do
+--                     -- Get children as a list rather than tuple
+--                     pop <- set
+--                     let children = generateChildren (selectParents pop)
+--                     return children
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
 selectParents hPop = tournamentSelection hPop 3
@@ -83,14 +82,14 @@ onePointCrossover (h1, h2) seed = (
                                     i = getRandomIndex seed h1
 
 -- MUTATION
-mutationStep :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
--- mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
-mutationStep set = do
-                pop <- set
-                let maxIdenticalCount = getLargestCountOfEquivalents (map fst pop)
-                let mutoidCount = (maxIdenticalCount `div` 2) + 1
-                let mutoids = mutateHeuristics (selectHeuristicsToMutate mutoidCount pop)
-                return mutoids
+mutationStep :: HeuristicPopulation -> HeuristicPopulation
+mutationStep hPop = mutateHeuristics (selectHeuristicsToMutate (((getLargestCountOfEquivalents (map fst hPop)) `div` 2)+1) hPop)
+-- mutationStep set = do
+--                 pop <- set
+--                 let maxIdenticalCount = getLargestCountOfEquivalents (map fst pop)
+--                 let mutoidCount = (maxIdenticalCount `div` 2) + 1
+--                 let mutoids = mutateHeuristics (selectHeuristicsToMutate mutoidCount pop)
+--                 return mutoids
 
 -- Gets the size of the largest set of equal values in a list
 -- For example
