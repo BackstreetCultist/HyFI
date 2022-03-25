@@ -17,7 +17,7 @@ getOperatorsByClass :: [[Operator]]
 getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [reverseSolution, invertSolution]]
 
 getAcceptors :: [Acceptor]
-getAcceptors = [naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor]
+getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor]
 
 -- All evaluators given *as* evaluators compare two solutions
 getEvaluators :: [Evaluator]

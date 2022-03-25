@@ -3,6 +3,7 @@ module HyperHeuristic.Functions.Evolution where
 import Control.Monad.State
 
 import Data.List (sort)
+import Data.List.Unique (sortUniq)
 
 import HyperHeuristic.Types.HyperHeuristicTypes
 import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed, randomiseList, getRandomIndex)
@@ -16,7 +17,7 @@ evolvePopulation initialSet = do
                     initialSolutionPopulation <- get
                     initialHeuristicPopulation <- initialSet
                     reproductionHeuristicPopulation <- reproductionStep initialSet
-                    mutationHeuristicPopulation <- mutationStep (return reproductionHeuristicPopulation) -- Bind current state first
+                    mutationHeuristicPopulation <- mutationStep initialSet -- No need to bind any state here as kids are not applied
                     return (survivalStep initialHeuristicPopulation reproductionHeuristicPopulation mutationHeuristicPopulation)
 
 -- Produces a new population of length equal to the original
@@ -36,7 +37,7 @@ reproductionStep set = do
                     -- Get children as a list rather than tuple
                     pop <- set
                     let children = generateChildren (selectParents pop)
-                    applyPopulation (return children)
+                    return children
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
 selectParents hPop = tournamentSelection hPop 3
@@ -86,15 +87,26 @@ mutationStep :: State SolutionPopulation HeuristicPopulation -> State SolutionPo
 -- mutationStep hPop = applyMutoid (mutateHeuristic (selectHeuristicToMutate hPop))
 mutationStep set = do
                 pop <- set
-                let mutoid = mutateHeuristic (selectHeuristicToMutate pop)
-                applyPopulation (return mutoid)
+                let maxIdenticalCount = getLargestCountOfEquivalents (map fst pop)
+                let mutoidCount = (maxIdenticalCount `div` 2) + 1
+                let mutoids = mutateHeuristics (selectHeuristicsToMutate mutoidCount pop)
+                return mutoids
 
+-- Gets the size of the largest set of equal values in a list
+-- For example
+-- ["11111111", "11111111", "11111111", "11110000", "11110000", "11111111", "00000000", "11110000"]
+-- returns 4
+getLargestCountOfEquivalents :: Eq a => Ord a => [a] -> Int
+getLargestCountOfEquivalents xs = head (reverse (sort (map length (map (\y -> filter (==y) xs) (sortUniq xs)))))
 
-selectHeuristicToMutate :: HeuristicPopulation -> Heuristic
-selectHeuristicToMutate hPop = fst (hPop !! (getRandomIndex (getSeed (fst (head hPop))) hPop))
+selectHeuristicsToMutate :: Int -> HeuristicPopulation -> [Heuristic]
+selectHeuristicsToMutate i [] = []
+selectHeuristicsToMutate 0 _ = []
+selectHeuristicsToMutate i hPop = fst (hPop !! (getRandomIndex (getSeed (fst (head hPop))) hPop)) : selectHeuristicsToMutate (i-1) (tail hPop)
 
-mutateHeuristic :: Heuristic -> HeuristicPopulation
-mutateHeuristic h = [(flipRandomBits 4 h, (0,0))]
+mutateHeuristics :: [Heuristic] -> HeuristicPopulation
+mutateHeuristics [] = []
+mutateHeuristics (h:hs) = (flipRandomBits (length h) h, (0,0)) : mutateHeuristics hs
 
 flipRandomBits :: Int -> Heuristic -> Heuristic
 flipRandomBits 0 h = h
@@ -113,4 +125,4 @@ sortByAverageScore hPop = reverse (map snd (sort (getAverageScores hPop)))
 
 -- helper function for above
 getAverageScores :: HeuristicPopulation -> [(Int, (Heuristic, (Score, Rounds)))]
-getAverageScores hPop = [((s `div` r), (h, (s, r))) | (h, (s, r)) <- hPop]
+getAverageScores hPop = [((s `div` (r+1)), (h, (s, r))) | (h, (s, r)) <- hPop] -- Handles case where heuristic has not been run
