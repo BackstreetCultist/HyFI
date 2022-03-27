@@ -1,4 +1,4 @@
-module Solution.BinPacking.Types.BinPackingTypes where
+module ProblemModules.BinPacking.Types where
 
 import Data.List.Unique (repeated)
 

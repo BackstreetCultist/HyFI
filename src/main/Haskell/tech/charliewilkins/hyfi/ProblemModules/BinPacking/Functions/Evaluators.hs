@@ -1,8 +1,8 @@
-module Solution.BinPacking.Functions.BinPackingEvaluators where
+module ProblemModules.BinPacking.Functions.Evaluators where
 
 import Data.List
 
-import Solution.BinPacking.Types.BinPackingTypes
+import ProblemModules.BinPacking.Types
 
 newObjectiveValue :: Evaluator
 newObjectiveValue _ new _ = length new

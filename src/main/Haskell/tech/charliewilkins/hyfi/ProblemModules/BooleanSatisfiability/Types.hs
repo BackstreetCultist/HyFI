@@ -1,4 +1,4 @@
-module Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes where
+module ProblemModules.BooleanSatisfiability.Types where
 
 type HeuristicRepresentation = [Char]
 type Operator = Solution -> OperatorMagnitude -> Instance -> Solution

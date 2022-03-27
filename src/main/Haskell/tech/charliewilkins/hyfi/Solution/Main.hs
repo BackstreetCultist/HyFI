@@ -1,4 +1,4 @@
-module Solution.Solution where
+module Solution.Main where
 
 import Control.Monad.State
 import Control.Parallel.Strategies (parMap, rdeepseq)
@@ -7,10 +7,10 @@ import Data.Typeable
 import Data.Char (digitToInt)
 import Data.List (foldl')
 
-import HyperHeuristic.Types.HyperHeuristicTypes
+import HyperHeuristic.Types
 
-import Solution.BooleanSatisfiability.BooleanSatisfiability (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
-import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+import ProblemModules.BooleanSatisfiability.Main (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
+import ProblemModules.BooleanSatisfiability.Types
 
 -- Application needs this on other side
 type SolutionPopulation = (Instance, [[Solution]])

@@ -1,13 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-module HyperHeuristic.HyperHeuristic where
+module HyperHeuristic.Main where
 
 import Data.List (sort)
 import Data.List.Unique (sortUniq)
 
 import System.Random (randomRs, mkStdGen)
 
-import HyperHeuristic.Types.HyperHeuristicTypes
-import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed, randomiseList, getRandomIndex)
+import HyperHeuristic.Types
+import Helpers.RandomOperators (getSeed, randomiseList, getRandomIndex)
 
 -- STARTUP --------------------------------------------------------------------
 

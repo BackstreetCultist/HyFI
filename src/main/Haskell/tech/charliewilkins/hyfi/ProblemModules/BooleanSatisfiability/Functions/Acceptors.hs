@@ -1,10 +1,10 @@
-module Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors where
+module ProblemModules.BooleanSatisfiability.Functions.Acceptors where
 
 import System.Random (randomR, mkStdGen)
 
-import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed)
-import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (improvement, newObjectiveValue, newPercentageCorrect)
+import Helpers.RandomOperators (getSeed)
+import ProblemModules.BooleanSatisfiability.Types
+import ProblemModules.BooleanSatisfiability.Functions.Evaluators (improvement, newObjectiveValue, newPercentageCorrect)
 
 naiveAcceptor :: Acceptor
 naiveAcceptor _ _ _ = True

@@ -1,4 +1,4 @@
-module HyperHeuristic.Types.HyperHeuristicTypes where
+module HyperHeuristic.Types where
 
 type Rounds = Int
 type Score = Int

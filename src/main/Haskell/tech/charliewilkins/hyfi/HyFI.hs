@@ -7,10 +7,10 @@ import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 import System.IO (hFlush, stdout)
 import System.IO.Unsafe (unsafePerformIO)
 
-import HyperHeuristic.HyperHeuristic (generateHeuristicPopulationOfSize, evolvePopulation)
-import HyperHeuristic.Types.HyperHeuristicTypes (HeuristicPopulation)
-import HyperHeuristic.Functions.Helpers.RandomOperators (randomiseList, getSeed)
-import Solution.Solution (SolutionPopulation, getInstance, generateSolutionPopulationOfSize, evaluateSolution, applyPopulation)
+import HyperHeuristic.Main (generateHeuristicPopulationOfSize, evolvePopulation)
+import HyperHeuristic.Types (HeuristicPopulation)
+import Helpers.RandomOperators (randomiseList, getSeed)
+import Solution.Main (SolutionPopulation, getInstance, generateSolutionPopulationOfSize, evaluateSolution, applyPopulation)
 
 attach :: HeuristicPopulation -> SolutionPopulation -> State SolutionPopulation HeuristicPopulation
 attach hs ss = return hs

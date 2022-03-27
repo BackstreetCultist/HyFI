@@ -1,8 +1,8 @@
-module Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityOperators where
+module ProblemModules.BooleanSatisfiability.Functions.Operators where
 
-import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed, getRandomIndex)
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (evaluateClause)
-import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
+import Helpers.RandomOperators (getSeed, getRandomIndex)
+import ProblemModules.BooleanSatisfiability.Functions.Evaluators (evaluateClause)
+import ProblemModules.BooleanSatisfiability.Types
 
 -- LOCAL SEARCH HEURISTICS ----------------------------------------------------
 flipRandomVariable :: Operator

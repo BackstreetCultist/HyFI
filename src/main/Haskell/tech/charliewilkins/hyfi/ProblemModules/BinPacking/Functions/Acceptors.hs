@@ -1,10 +1,10 @@
-module Solution.BinPacking.Functions.BinPackingAcceptors where
+module ProblemModules.BinPacking.Functions.Acceptors where
 
 import System.Random (randomR, mkStdGen)
 
-import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed')
-import Solution.BinPacking.Functions.BinPackingEvaluators (improvement, averageFullnessIncrease, fullBinsImprovement)
-import Solution.BinPacking.Types.BinPackingTypes
+import Helpers.RandomOperators (getSeed')
+import ProblemModules.BinPacking.Functions.Evaluators (improvement, averageFullnessIncrease, fullBinsImprovement)
+import ProblemModules.BinPacking.Types
 
 naiveAcceptor :: Acceptor
 naiveAcceptor _ _ _ = True

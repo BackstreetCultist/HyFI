@@ -1,14 +1,14 @@
-module Solution.BooleanSatisfiability.BooleanSatisfiability where
+module ProblemModules.BooleanSatisfiability.Main where
 
 import System.Directory
 import System.IO
 import System.IO.Unsafe (unsafePerformIO)
 import System.Random (randomRs, mkStdGen)
 
-import Solution.BooleanSatisfiability.Types.BooleanSatisfiabilityTypes
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityOperators (flipRandomVariable, flipRandomVariableFromBrokenClause, reverseSolution, invertSolution)
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityAcceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
-import Solution.BooleanSatisfiability.Functions.BooleanSatisfiabilityEvaluators (newObjectiveValue, percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance)
+import ProblemModules.BooleanSatisfiability.Types
+import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, reverseSolution, invertSolution)
+import ProblemModules.BooleanSatisfiability.Functions.Acceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
+import ProblemModules.BooleanSatisfiability.Functions.Evaluators (newObjectiveValue, percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance)
 
 generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
@@ -28,7 +28,7 @@ getProblemInstance file = unsafePerformIO (loadProblemInstance file)
 
 loadProblemInstance :: String -> IO (Instance)
 loadProblemInstance file = do
-                        let filePath =  "Solution/BooleanSatisfiability/Instances/" ++ file
+                        let filePath =  "ProblemModules/BooleanSatisfiability/Instances/" ++ file
                         print filePath
                         handle <- openFile filePath ReadMode
                         contents <- hGetContents handle

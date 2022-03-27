@@ -1,9 +1,9 @@
-module Solution.BinPacking.Functions.BinPackingOperators where
+module ProblemModules.BinPacking.Functions.Operators where
 
 import Data.List (sortBy)
 
-import HyperHeuristic.Functions.Helpers.RandomOperators (getSeed', getRandomIndex, randomiseList)
-import Solution.BinPacking.Types.BinPackingTypes
+import Helpers.RandomOperators (getSeed', getRandomIndex, randomiseList)
+import ProblemModules.BinPacking.Types
 
 -- Chooses a random item from a random bin, and attempts to place it into a new random bin
 randomPlace :: Operator

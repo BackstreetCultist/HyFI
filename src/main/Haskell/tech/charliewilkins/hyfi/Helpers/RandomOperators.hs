@@ -1,4 +1,4 @@
-module HyperHeuristic.Functions.Helpers.RandomOperators where
+module Helpers.RandomOperators where
 
 import System.Random (randomR, mkStdGen)
 import System.IO.Unsafe (unsafePerformIO)
@@ -7,7 +7,7 @@ import Data.Char (digitToInt)
 import Data.List (foldl')
 import Data.Time.Clock.POSIX (getPOSIXTime)
 
-import HyperHeuristic.Types.HyperHeuristicTypes
+import HyperHeuristic.Types
 
 -- Get seed with heuristic value as denary + current time
 getSeed :: Heuristic -> Int
