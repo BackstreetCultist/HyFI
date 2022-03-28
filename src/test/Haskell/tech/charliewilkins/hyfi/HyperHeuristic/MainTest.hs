@@ -41,6 +41,33 @@ checkGenerateHeuristicPopulationOfSize = do
 prop_generateHeuristicPopulationOfSize_len (Positive n) x = length (generateHeuristicPopulationOfSize n x) == n
 checkHeuristicPopulationSize = quickCheck prop_generateHeuristicPopulationOfSize_len
 
+-- EVOLUTION ------------------------------------------------------------------
+checkEvolution = do
+    checkReproductionStep
+    checkGenerateChildren
+
+-- reproductionStep
+-- GIVEN a heuristic population
+-- WHEN I call reproductionStep
+checkReproductionStep = do
+    checkReproductionStepLength
+-- THEN I recieve a population of length 2
+prop_checkReproduction_len hPop = length (reproductionStep hPop) == 2
+checkReproductionStepLength = quickCheck prop_checkReproduction_len
+
+-- generateChildren
+-- GIVEN a pair of heuristics
+-- WHEN I call generateChildren
+checkGenerateChildren = do
+    checkGenerateChildrenLength
+    checkGenerateChildrenChildLength
+-- THEN I recieve a population of length 2
+prop_checkGenerateChildren_len (x,y) = length (generateChildren ((generateHeuristic x),(generateHeuristic y))) == 2
+checkGenerateChildrenLength = quickCheck prop_checkGenerateChildren_len
+-- AND each child is the correct length
+prop_generateChildren_childLen (x,y) = length (fst (head (generateChildren ((generateHeuristic x),(generateHeuristic y))))) == length (generateHeuristic x) && length (fst (head (reverse (generateChildren ((generateHeuristic x),(generateHeuristic y)))))) == length (generateHeuristic x)
+checkGenerateChildrenChildLength = quickCheck prop_generateChildren_childLen
+
 -- GENERAL --------------------------------------------------------------------
 checkHyperHeuristic = do
     checkStartup
