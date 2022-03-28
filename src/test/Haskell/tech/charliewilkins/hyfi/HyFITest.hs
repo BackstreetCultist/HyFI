@@ -1,6 +1,8 @@
 module HyFITest where
 
-import HyperHeuristicTest (checkHyperHeuristic)
+import Helpers.RandomOperatorsTest (checkRandomOperators)
+import HyperHeuristic.MainTest (checkHyperHeuristic)
 
 checkHyFI = do
     checkHyperHeuristic
+    checkRandomOperators

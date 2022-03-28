@@ -1,13 +1,11 @@
-module HyperHeuristicTest where
+module HyperHeuristic.MainTest where
 
 import Data.List
 
 import Test.QuickCheck
 
-import HyperHeuristic
-import RandomOperators (getRandomIndex)
-import ApplicationTest (checkApplication)
-import RandomOperatorsTest (checkRandomOperators)
+import HyperHeuristic.Main
+import Helpers.RandomOperators (getRandomIndex)
 
 -- STARTUP --------------------------------------------------------------------
 checkStartup = do
@@ -45,6 +43,4 @@ checkHeuristicPopulationSize = quickCheck prop_generateHeuristicPopulationOfSize
 
 -- GENERAL --------------------------------------------------------------------
 checkHyperHeuristic = do
-    checkRandomOperators
     checkStartup
-    checkApplication

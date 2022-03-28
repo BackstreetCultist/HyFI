@@ -1,10 +1,10 @@
-module RandomOperatorsTest where
+module Helpers.RandomOperatorsTest where
 
 import Test.QuickCheck
 
 import Data.List (sort)
 
-import RandomOperators (getRandomIndex, randomiseList)
+import Helpers.RandomOperators (getRandomIndex, randomiseList)
 
 checkRandomOperators = do
     checkGetRandomIndex

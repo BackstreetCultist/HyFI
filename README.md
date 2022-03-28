@@ -25,6 +25,6 @@ The code can also be invoked manually with the following command:
 Haskell property tests built with QuickCheck are included,
 and can be run with the following commands:
 
-    ghci src/test/Haskell/tech/charliewilkins/hyfi/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs
+    ghci src/test/Haskell/tech/charliewilkins/hyfi/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/**/*.hs
 
 ## Implementing 
