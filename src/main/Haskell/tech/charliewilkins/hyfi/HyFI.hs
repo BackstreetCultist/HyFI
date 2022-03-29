@@ -39,7 +39,7 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
 
                                                                                             coreLoop (attach hs ss') ss' startTime newTime limit
                                                     | otherwise = do
-                                                        return (detach initialSs set)
+                                                        return (detach initialSs (applyPopulation set))
 
 main :: IO ()
 main = do
