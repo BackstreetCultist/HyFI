@@ -36,7 +36,7 @@ reproductionStep :: HeuristicPopulation -> HeuristicPopulation
 reproductionStep hPop = generateChildren (selectParents hPop)
 
 selectParents :: HeuristicPopulation -> (Heuristic, Heuristic)
-selectParents hPop = tournamentSelection hPop 3
+selectParents hPop = tournamentSelection hPop (((length hPop) `div` 2) -1)
 -- This assumes two parents - should we generalise to crossover between n parents?
 
 naiveSelection :: HeuristicPopulation -> (Heuristic, Heuristic)
