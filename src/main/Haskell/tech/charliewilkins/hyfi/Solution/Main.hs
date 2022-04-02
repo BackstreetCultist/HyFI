@@ -48,14 +48,14 @@ selectOperator h = binaryToItem (substring 0 3 h) operators
                 where
                     operators = binaryToItem (substring 3 6 h) getOperatorsByClass
 
-selectOperatorMagnitude :: HeuristicRepresentation -> OperatorMagnitude
-selectOperatorMagnitude h = (binaryVal (substring 6 9 h))+1
+selectEvaluator :: HeuristicRepresentation -> Evaluator
+selectEvaluator h = binaryToItem (substring 6 9 h) getEvaluators
 
 selectAcceptor :: HeuristicRepresentation -> Acceptor
 selectAcceptor h = binaryToItem (substring 9 12 h) getAcceptors
 
-selectEvaluator :: HeuristicRepresentation -> Evaluator
-selectEvaluator h = binaryToItem (substring 12 15 h) getEvaluators
+selectOperatorMagnitude :: HeuristicRepresentation -> OperatorMagnitude
+selectOperatorMagnitude h = (binaryVal (substring 12 16 h))+1
 
 -- Get item from list with reference to binary data,
 -- where there is no direct 1-to-1 relationship

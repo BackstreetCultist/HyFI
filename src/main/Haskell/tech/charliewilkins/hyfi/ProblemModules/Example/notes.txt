@@ -1,0 +1,16 @@
+The following files represent an example Problem Module (PM) for HyFI.
+
+Throughout the module, you will find a number of functions and types whose
+definitions are incomplete. By filling these out, a working PM will have been
+created. These functions are the ones which are exposed to the Solution.Main
+module, allowing the PM to be run.
+
+The next task is to create multiple effective Operators, Acceptors and
+Evaluators. A heuristic will only ever be as good as its components, and a wide
+field to select from will improve the performance of the Genetic Algorithm. The
+maximum number of components that HyFI can 'handle' is as follows:
+    - 8 Acceptors
+    - 8 Evaluators
+    - 8 sets of 8 Operators
+
+Thank you for choosing HyFI, and happy hacking!
