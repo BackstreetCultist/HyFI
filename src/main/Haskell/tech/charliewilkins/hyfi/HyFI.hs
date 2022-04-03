@@ -1,9 +1,12 @@
 import Control.DeepSeq (deepseq)
 import Control.Monad.State
 
+import Data.Function (on)
+import Data.List (sortBy)
 import Data.List.Unique (sortUniq)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 
+import System.Environment (getArgs)
 import System.IO (hFlush, stdout)
 import System.IO.Unsafe (unsafePerformIO)
 
@@ -41,12 +44,18 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                     | otherwise = do
                                                         return (detach initialSs (applyPopulation set))
 
-main :: IO ()
 main = do
-    f <- prompt "File: "
-    sS <- prompt "Seed: "
+    -- f <- prompt "File: "
+    -- sS <- prompt "Seed: "
+    -- let s = read sS :: Int
+    -- tS <- prompt "Time Limit: "
+    -- let t = fromInteger (read tS :: Integer)
+    -- let i = getInstance f
+    args <- getArgs
+    let f = args !! 0
+    let sS = args !! 1
     let s = read sS :: Int
-    tS <- prompt "Time Limit: "
+    let tS = args !! 2
     let t = fromInteger (read tS :: Integer)
     let i = getInstance f
 
@@ -79,21 +88,10 @@ main = do
     print finalHeuristicPopulation
     print "**********************************"
     print "*** FINAL SOLUTION VALUES ***"
-    print ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation))
+    let solutionsWithValues = sortBy (compare `on` snd) [(x, evaluateSolution x i) | x <- concat (snd finalSolutionPopulation)]
+    print solutionsWithValues
     print "*****************************"
-    print "*** FINAL SOLUTION AVGS ***"
-    print (map avg ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation)))
-    print "*****************************"
-    print "*** FINAL AVERAGE AVERAGE ***"
-    print (avg (map avg ((map.map) (\y -> evaluateSolution y i) (snd finalSolutionPopulation))))
-    print "*******************************"
-    print "Bye!"
-    print "..."
-    print "Hang on"
-    print "One final check"
-    print ((fst finalSolutionPopulation) == i)
-    print ((length initialHeuristicPopulation) == (length finalHeuristicPopulation))
-    print ((length finalSolutionPopulation) == (length finalSolutionPopulation))
+    print (snd (head (reverse solutionsWithValues)))
 
 avg :: [Int] -> Int
 avg [] = 0
