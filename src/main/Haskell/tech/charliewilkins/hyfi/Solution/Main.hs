@@ -29,7 +29,7 @@ generateSolutionList n seed i = generateSolution seed i : generateSolutionList (
 
 generateSolutionListOfLists :: Int -> Int -> Instance -> [[Solution]]
 generateSolutionListOfLists 0 _ _ = []
-generateSolutionListOfLists n seed i = generateSolutionList 8 seed i : generateSolutionListOfLists (n-1) (seed+1) i
+generateSolutionListOfLists n seed i = generateSolutionList 1 seed i : generateSolutionListOfLists (n-1) (seed+1) i
 
 generateSolutionPopulationOfSize :: Int -> Int -> Instance -> SolutionPopulation
 generateSolutionPopulationOfSize n seed i = (i, generateSolutionListOfLists n seed i)

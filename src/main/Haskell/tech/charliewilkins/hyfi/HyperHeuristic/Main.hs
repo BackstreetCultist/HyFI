@@ -96,7 +96,7 @@ selectHeuristicsToMutate i hPop = fst (hPop !! (getRandomIndex (getSeed (fst (he
 
 mutateHeuristics :: [Heuristic] -> HeuristicPopulation
 mutateHeuristics [] = []
-mutateHeuristics (h:hs) = (flipRandomBits (length h) h, (0,0)) : mutateHeuristics hs
+mutateHeuristics (h:hs) = (flipRandomBits ((length h) `div` 4) h, (0,0)) : mutateHeuristics hs
 
 flipRandomBits :: Int -> Heuristic -> Heuristic
 flipRandomBits 0 h = h
