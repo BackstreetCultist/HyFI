@@ -6,7 +6,7 @@ import System.IO.Unsafe (unsafePerformIO)
 import System.Random (randomRs, mkStdGen)
 
 import ProblemModules.BooleanSatisfiability.Types
-import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, reverseSolution, invertSolution)
+import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, gsat, reverseSolution, invertSolution, randomlyReinitialise)
 import ProblemModules.BooleanSatisfiability.Functions.Acceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
 import ProblemModules.BooleanSatisfiability.Functions.Evaluators (newObjectiveValue, percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance)
 
@@ -14,7 +14,7 @@ generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
 getOperatorsByClass :: [[Operator]]
-getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [reverseSolution, invertSolution]]
+getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
 
 getAcceptors :: [Acceptor]
 getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor]
