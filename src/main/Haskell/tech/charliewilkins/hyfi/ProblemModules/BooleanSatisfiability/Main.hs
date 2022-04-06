@@ -6,7 +6,7 @@ import System.IO.Unsafe (unsafePerformIO)
 import System.Random (randomRs, mkStdGen)
 
 import ProblemModules.BooleanSatisfiability.Types
-import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, gsat, reverseSolution, invertSolution, randomlyReinitialise)
+import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, gsat, randomlyReinitialise)
 import ProblemModules.BooleanSatisfiability.Functions.Acceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
 import ProblemModules.BooleanSatisfiability.Functions.Evaluators (newObjectiveValue, percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance)
 
