@@ -80,7 +80,8 @@ onePointCrossover (h1, h2) seed = (
 
 -- MUTATION
 mutationStep :: HeuristicPopulation -> HeuristicPopulation
-mutationStep hPop = mutateHeuristics (selectHeuristicsToMutate (((getLargestCountOfEquivalents (map fst hPop)) `div` 2)+1) hPop)
+-- mutationStep hPop = mutateHeuristics (selectHeuristicsToMutate (((getLargestCountOfEquivalents (map fst hPop)) `div` 2)+1) hPop)
+mutationStep hPop = mutateHeuristics (selectHeuristicsToMutate 2 hPop)
 
 -- Gets the size of the largest set of equal values in a list
 -- For example
