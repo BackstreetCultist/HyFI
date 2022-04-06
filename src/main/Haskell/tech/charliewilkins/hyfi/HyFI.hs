@@ -27,18 +27,7 @@ coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime 
                                                                                             let (hs, ss) = detach initialSs $! cyclePopulation set
 
                                                                                             deepseq (hs, ss) print ()
-                                                                                            print "Unique heuristics: "
-                                                                                            print (length (sortUniq (map fst hs)))
-                                                                                            -- print "*** NEW HEURISTIC POPULATION ***"
-                                                                                            -- print hs
-                                                                                            -- print "************************************"
-                                                                                            -- print "*** NEW SOLUTION VALUES ***"
-                                                                                            -- print ((map.map) (\y -> evaluateSolution y (fst ss)) (snd ss))
-                                                                                            -- print "***********************************"
-                                                                                            -- print "*** RANDOMISING SOLUTION ORDER ***"
                                                                                             let ss' = ((fst ss), (randomiseList (getSeed (fst (head hs))) (snd ss)))
-                                                                                            -- print "**********************************"
-                                                                                            -- print ()
 
                                                                                             coreLoop (attach hs ss') ss' startTime newTime limit
                                                     | otherwise = do
