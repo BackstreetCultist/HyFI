@@ -1,6 +1,6 @@
-module ProblemModules.BooleanSatisfiability.Functions.Evaluators where
+module ProblemModules.Example.Functions.Evaluators where
 
-import ProblemModules.BooleanSatisfiability.Types
+import ProblemModules.Example.Types
 
 newObjectiveValue :: Evaluator
 newObjectiveValue old new (_, clauses) = sum (map (evaluateClause new) clauses)
