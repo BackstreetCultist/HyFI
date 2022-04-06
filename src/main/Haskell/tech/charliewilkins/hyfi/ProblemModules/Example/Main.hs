@@ -5,20 +5,20 @@ import ProblemModules.Example.Functions.Operators
 import ProblemModules.Example.Functions.Acceptors
 import ProblemModules.Example.Functions.Evaluators
 
-getProblemInstance :: String -> Instance
-getProblemInstance file =
+-- getProblemInstance :: String -> Instance
+-- getProblemInstance file =
 
-generator :: Int -> Instance -> Solution
-generator s i =
+-- generator :: Int -> Instance -> Solution
+-- generator s i =
 
-getOperatorsByClass :: [[Operator]]
-getOperatorsByClass =
+-- getOperatorsByClass :: [[Operator]]
+-- getOperatorsByClass =
 
-getAcceptors :: [Acceptor]
-getAcceptors =
+-- getAcceptors :: [Acceptor]
+-- getAcceptors =
 
-getEvaluators :: [Evaluator]
-getEvaluators =
+-- getEvaluators :: [Evaluator]
+-- getEvaluators =
 
-getObjectiveValue :: Evaluator
-getObjectiveValue =
+-- getObjectiveValue :: Evaluator
+-- getObjectiveValue =
