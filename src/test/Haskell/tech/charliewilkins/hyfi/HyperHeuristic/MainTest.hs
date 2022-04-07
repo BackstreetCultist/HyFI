@@ -43,6 +43,14 @@ checkHeuristicPopulationSize = quickCheck prop_generateHeuristicPopulationOfSize
 
 -- EVOLUTION ------------------------------------------------------------------
 checkEvolution = do
+    checkSurvival
+    checkReproduction
+    checkMutation
+
+checkSurvival = do
+    return ()
+
+checkReproduction = do
     checkReproductionStep
     checkGenerateChildren
 
@@ -68,6 +76,10 @@ checkGenerateChildrenLength = quickCheck prop_checkGenerateChildren_len
 prop_generateChildren_childLen (x,y) = length (fst (head (generateChildren ((generateHeuristic x),(generateHeuristic y))))) == length (generateHeuristic x) && length (fst (head (reverse (generateChildren ((generateHeuristic x),(generateHeuristic y)))))) == length (generateHeuristic x)
 checkGenerateChildrenChildLength = quickCheck prop_generateChildren_childLen
 
+checkMutation = do
+    return ()
+
 -- GENERAL --------------------------------------------------------------------
 checkHyperHeuristic = do
     checkStartup
+    checkEvolution
