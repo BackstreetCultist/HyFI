@@ -60,7 +60,8 @@ selectOperatorMagnitude h = (binaryVal (substring 12 16 h))+1
 -- Get item from list with reference to binary data,
 -- where there is no direct 1-to-1 relationship
 binaryToItem :: [Char] -> [a] -> a
-binaryToItem bits xs = xs !! (((length xs)-1) `mod` ((binaryVal bits)+1))
+-- binaryToItem bits xs = xs !! (((length xs)-1) `mod` ((binaryVal bits)+1))
+binaryToItem bits xs = xs !! (binaryVal bits `mod` length xs)
 -- Implemented here using modulo
 
 -- Substring between start (inclusive) and end (exclusive)
