@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module ProblemModules.BooleanSatisfiability.MainTest where
 
 import Data.List
@@ -110,7 +112,22 @@ checkAcceptors = do
 
 -- EVALUATORS -----------------------------------------------------------------
 checkEvaluators = do
-    return ()
+    checkEvaluateClause
+
+-- evaluateClause
+-- GIVEN a solution and a clause
+-- WHEN I evaluate the clause
+checkEvaluateClause = do
+    checkEvaluateClausePositive
+    checkEvaluateClauseNegative
+-- AND the clause contains all positives
+-- THEN I receive a 1 if the clause is satisfied
+prop_checkEvaluateClause_pos (Positive s) (Positive c) = evaluateClause (take (s * 1000) (repeat '1')) (take c [1..]) == 1
+checkEvaluateClausePositive = quickCheck prop_checkEvaluateClause_pos
+-- AND the clause contains all positives
+-- THEN I receive a 0 if the clause is unsatisfied
+prop_checkEvaluateClause_neg (Positive s) (Positive c) = evaluateClause (take (s * 1000) (repeat '0')) (take c [1..]) == 0
+checkEvaluateClauseNegative = quickCheck prop_checkEvaluateClause_neg
 
 -- GENERAL --------------------------------------------------------------------
 checkBooleanSatisfiability = do
