@@ -2,7 +2,9 @@ module HyFITest where
 
 import Helpers.RandomOperatorsTest (checkRandomOperators)
 import HyperHeuristic.MainTest (checkHyperHeuristic)
+import Solution.MainTest (checkSolution)
 
 main = do
-    checkHyperHeuristic
     checkRandomOperators
+    checkHyperHeuristic
+    checkSolution
