@@ -52,6 +52,7 @@ checkSurvival = do
 
 checkReproduction = do
     checkReproductionStep
+    checkSelectParents
     checkGenerateChildren
 
 -- reproductionStep
@@ -63,18 +64,39 @@ checkReproductionStep = do
 prop_checkReproduction_len hPop = length (reproductionStep hPop) == 2
 checkReproductionStepLength = quickCheck prop_checkReproduction_len
 
+-- selectParents
+-- GIVEN a heuristic population
+-- WHEN I select parents
+checkSelectParents = do
+    checkSelectParentsDifferent
+-- AND the list is of size > 4
+-- AND the first entry in the list is valid binary
+-- THEN I receive two different parents
+prop_checkSelectParents_diff hPop =  length hPop > 2 && all (== True) (map (\x -> fst x /= "" && snd (snd x) >= 0) hPop) ==> fst parents /= snd parents where parents = (selectParents ([("10001110101",(0,0))] ++ hPop))
+checkSelectParentsDifferent = quickCheckWith stdArgs { maxDiscardRatio = 1000 } prop_checkSelectParents_diff
+
 -- generateChildren
 -- GIVEN a pair of heuristics
 -- WHEN I call generateChildren
 checkGenerateChildren = do
     checkGenerateChildrenLength
     checkGenerateChildrenChildLength
+    checkGenerateChildrenUnique
+    checkGenerateChildrenDifferent
 -- THEN I recieve a population of length 2
 prop_checkGenerateChildren_len (x,y) = length (generateChildren ((generateHeuristic x),(generateHeuristic y))) == 2
 checkGenerateChildrenLength = quickCheck prop_checkGenerateChildren_len
 -- AND each child is the correct length
 prop_generateChildren_childLen (x,y) = length (fst (head (generateChildren ((generateHeuristic x),(generateHeuristic y))))) == length (generateHeuristic x) && length (fst (head (reverse (generateChildren ((generateHeuristic x),(generateHeuristic y)))))) == length (generateHeuristic x)
 checkGenerateChildrenChildLength = quickCheck prop_generateChildren_childLen
+-- AND the two parents are different
+-- THEN each child is unique
+prop_checkGenerateChildren_unq y = length y > 1 ==> fst (head children) /= fst (last children) where children = generateChildren ("01",y)
+checkGenerateChildrenUnique = quickCheck prop_checkGenerateChildren_unq
+-- AND the two parents are different
+-- THEN neither child is equal to a parent
+prop_checkGenerateChildren_diff y = length y > 1 && y /= "01" ==> (fst (head children) /= "01" || fst (head children) /= y) && (fst (last children) /= "01" || fst (last children) /= y) where children = generateChildren ("01",y)
+checkGenerateChildrenDifferent = quickCheck prop_checkGenerateChildren_diff
 
 checkMutation = do
     return ()

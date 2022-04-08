@@ -49,14 +49,15 @@ naiveSelection hPop = (fst (head sortedPop), fst (sortedPop !! 1)) where sortedP
 tournamentSelection :: HeuristicPopulation -> Int -> (Heuristic, Heuristic)
 tournamentSelection hPop k = 
                             (
-                                fst (head (sortByAverageScore (getRandomSublistOfSize k (getSeed (fst (head hPop))) hPop))),
-                                fst (head (sortByAverageScore (getRandomSublistOfSize k (getSeed (fst (last hPop))) hPop)))
+                                firstParent,
+                                fst (head (sortByAverageScore (getRandomSublistOfSize k ((getSeed (fst (head hPop)))+1) [h | h <- hPop, fst h /= firstParent])))
                             )
--- Note that this has the chance of selecting the same parent in both 'slots' - is this an issue? TODO
+                            where firstParent = fst (head (sortByAverageScore (getRandomSublistOfSize k (getSeed (fst (head hPop))) hPop)))
 
 -- Returns a random sublist of size k
 getRandomSublistOfSize :: Int -> Int -> [a] -> [a]
 getRandomSublistOfSize 0 _ _ = []
+getRandomSublistOfSize _ _ (x:[]) = [x]
 getRandomSublistOfSize k seed xs = head (randomisedList) : getRandomSublistOfSize (k-1) (seed+1) (tail randomisedList)
                                 where
                                     randomisedList = randomiseList seed xs
