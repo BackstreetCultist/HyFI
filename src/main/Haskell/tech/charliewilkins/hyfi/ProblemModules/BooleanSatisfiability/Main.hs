@@ -14,14 +14,16 @@ generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
 getOperatorsByClass :: [[Operator]]
-getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
+-- getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
+getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [rasndomlyReinitialise]]
 
 getAcceptors :: [Acceptor]
-getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor]
+getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor]
 
 -- All evaluators given *as* evaluators compare two solutions
 getEvaluators :: [Evaluator]
-getEvaluators = [percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance]
+-- getEvaluators = [percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance]
+getEvaluators = [improvement, searchSpaceDistance, magnitudeDistance]
 
 getProblemInstance :: String -> Instance
 getProblemInstance file = unsafePerformIO (loadProblemInstance file)
