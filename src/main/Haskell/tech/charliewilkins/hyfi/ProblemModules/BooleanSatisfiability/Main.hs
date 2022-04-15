@@ -15,7 +15,7 @@ generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
 getOperatorsByClass :: [[Operator]]
 -- getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
-getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [rasndomlyReinitialise]]
+getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [randomlyReinitialise]]
 
 getAcceptors :: [Acceptor]
 getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor]
