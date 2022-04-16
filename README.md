@@ -24,10 +24,8 @@ Additionally,
 which will be logged to *bin/log.txt*.
 
 Please note that due to the way it interacts with teletypes,
-*multiRun.sh* will have some lag in its output,
+*multiRun.sh* will have some lag in its output -
 this is not something to be concerned by.
-
-The system arrives fully Dockerised for dependency management [TODO]
 
 ### Running with Multiple Processors
 
@@ -39,6 +37,14 @@ use the following command:
     ./compile.sh
     cd bin/
     ./HyFI -RTS [instance] [seed] [time limit] +RTS -N[number of cores]
+
+### Running in Docker
+
+HyFI arrives fully Dockerised for dependency management.
+To build and run HyFI in a Docker container, use the following commands:
+
+    docker build -t hyfi .
+    docker run -it hyfi
 
 ## Testing
 Haskell property tests built with QuickCheck are included,
