@@ -16,5 +16,4 @@ read seed
 echo "Please set time limit in seconds: "
 read limit
 
-val=$(./HyFI $problemInstance $seed $limit | tee /dev/tty | tail -1)
-echo $val
+./HyFI $problemInstance $seed $limit
