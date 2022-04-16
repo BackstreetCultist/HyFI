@@ -46,6 +46,9 @@ To build and run HyFI in a Docker container, use the following commands:
     docker build -t hyfi .
     docker run -it hyfi
 
+This will place you in the cloned version of this home directory within your Docker container -
+you can now run the system as described elsewhere on this page.
+
 ## Testing
 Haskell property tests built with QuickCheck are included,
 and can be run with the following commands:
