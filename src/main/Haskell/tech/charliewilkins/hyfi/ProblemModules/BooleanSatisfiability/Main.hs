@@ -18,12 +18,13 @@ getOperatorsByClass :: [[Operator]]
 getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [randomlyReinitialise]]
 
 getAcceptors :: [Acceptor]
-getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor]
+-- getAcceptors = [improvingAcceptor, substantialImprovementAcceptor, improvingOrChanceAcceptor]
+getAcceptors = [improvingAcceptor, substantialImprovementAcceptor]
 
 -- All evaluators given *as* evaluators compare two solutions
 getEvaluators :: [Evaluator]
 -- getEvaluators = [percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance]
-getEvaluators = [improvement, searchSpaceDistance, magnitudeDistance]
+getEvaluators = [improvement, percentageImprovement, searchSpaceDistance, magnitudeDistance]
 
 getProblemInstance :: String -> Instance
 getProblemInstance file = unsafePerformIO (loadProblemInstance file)
