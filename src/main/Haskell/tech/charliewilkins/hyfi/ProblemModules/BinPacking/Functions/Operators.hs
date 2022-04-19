@@ -24,7 +24,7 @@ randomMoveBetween s xs ys = (tail xs', head xs' : ys')
                                 xs' = randomiseList s xs
                                 ys' = randomiseList (s+1) ys
 
--- Chooses a random item from a random bin, and attempts to place it in a bin currently containing more items than it
+-- Chooses a random item from a random bin, and attempts to place it in a bin currently containing the same or more items than it
 maximisingPlace :: Operator
 maximisingPlace s 0 _ = destroyEmpties s
 maximisingPlace s m i = if solutionValid s' i then maximisingPlace s' (m-1) i else maximisingPlace s (m-1) i
@@ -36,7 +36,7 @@ maximisingMove seed s = tail (tail s') ++ (\x -> [fst x, snd x]) (randomMoveBetw
                         where
                             s' = getSemiRandomisedList seed s
                                 where
-                                    getSemiRandomisedList seed s = if length (head (s')) < length (head (tail (s'))) then s' else getSemiRandomisedList (seed+1) s
+                                    getSemiRandomisedList seed s = if length (head (s')) <= length (head (tail (s'))) then s' else getSemiRandomisedList (seed+1) s
                                                                     where
                                                                         s' = randomiseList seed s
 
