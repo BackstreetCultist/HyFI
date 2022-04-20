@@ -43,13 +43,16 @@ loadProblemInstance file = do
                     return (limit,clauses)
 
 getOperatorsByClass :: [[Operator]]
+-- getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [destroyHighestBins, destroyLowestBins, destroyRandomBins]]
 getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [destroyHighestBins, destroyLowestBins, destroyRandomBins]]
 
 getEvaluators :: [Evaluator]
+-- getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
 getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
 
 getAcceptors :: [Acceptor]
-getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, averageFullnessImprovingAcceptor, fullBinsImprovingAcceptor]
+-- getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, averageFullnessImprovingAcceptor, fullBinsImprovingAcceptor]
+getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, fullBinsImprovingAcceptor]
 
 getObjectiveValue :: Evaluator
 getObjectiveValue = newObjectiveValue
