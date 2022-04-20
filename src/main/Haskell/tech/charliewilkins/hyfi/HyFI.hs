@@ -23,23 +23,17 @@ detach sPop set = runState set sPop
 
 coreLoop :: State SolutionPopulation HeuristicPopulation -> SolutionPopulation -> UTCTime -> UTCTime -> NominalDiffTime -> IO ((HeuristicPopulation, SolutionPopulation))
 coreLoop set initialSs startTime currentTime limit  | ((diffUTCTime currentTime startTime) <= limit) = do
-                                                                                            newTime <- getCurrentTime
-                                                                                            let (hs, ss) = detach initialSs $! cyclePopulation set
+                                                        newTime <- getCurrentTime
+                                                        let (hs, ss) = detach initialSs $! cyclePopulation set
 
-                                                                                            deepseq (hs, ss) print ()
-                                                                                            let ss' = ((fst ss), (randomiseList (getSeed (fst (head hs))) (snd ss)))
+                                                        deepseq (hs, ss) print ()
+                                                        let ss' = ((fst ss), (randomiseList (getSeed (fst (head hs))) (snd ss)))
 
-                                                                                            coreLoop (attach hs ss') ss' startTime newTime limit
+                                                        coreLoop (attach hs ss') ss' startTime newTime limit
                                                     | otherwise = do
                                                         return (detach initialSs (applyPopulation set))
 
 main = do
-    -- f <- prompt "File: "
-    -- sS <- prompt "Seed: "
-    -- let s = read sS :: Int
-    -- tS <- prompt "Time Limit: "
-    -- let t = fromInteger (read tS :: Integer)
-    -- let i = getInstance f
     args <- getArgs
     let f = args !! 0
     let sS = args !! 1
@@ -57,12 +51,6 @@ main = do
     print "*** INITIAL SOLUTION VALUES ***"
     print ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation))
     print "***********************************"
-    print "*** INITIAL SOLUTION AVGS ***"
-    print (map avg ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation)))
-    print "*****************************"
-    print "*** INITIAL AVERAGE AVERAGE ***"
-    print (avg (map avg ((map.map) (\y -> evaluateSolution y i) (snd initialSolutionPopulation))))
-    print "*******************************"
 
     startTime <- getCurrentTime
     print "*** LOOPING ***"

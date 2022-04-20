@@ -21,7 +21,6 @@ read count
 
 for i in $(seq 1 $count)
 do
-    echo "Hello $i"
     newSeed=$(($seed + $i))
     echo "New seed: $newSeed"
     val=$(./HyFI $problemInstance $newSeed $limit | tee /dev/tty | tail -1)
