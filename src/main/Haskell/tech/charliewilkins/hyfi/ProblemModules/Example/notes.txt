@@ -1,9 +1,9 @@
 The following files represent an example Problem Module (PM) for HyFI.
 
-Throughout the module, you will find a number of functions and types whose
-definitions are incomplete. By filling these out, a working PM will have been
-created. These functions are the ones which are exposed to the Solution.Main
-module, allowing the PM to be run.
+The first task in creating a Problem Module is to define the types you will use.
+The Types.hs file contains two sets of types, the first of which (which are
+complete) should not be edited, as the Problem Layer will expect them as they
+are here. The second incomplete set must be completed by you.
 
 The next task is to create multiple effective Operators, Acceptors and
 Evaluators. A heuristic will only ever be as good as its components, and a wide
@@ -12,5 +12,9 @@ maximum number of components that HyFI can 'handle' is as follows:
     - 8 Acceptors
     - 8 Evaluators
     - 8 sets of 8 Operators
+
+Finally, the PM may be completed by filling out each of the incomplete functions
+found in the Main.hs module. Once you have done all of this, you will have a
+complete Problem Module that can be loaded and run by HyFI.
 
 Thank you for choosing HyFI, and happy hacking!
