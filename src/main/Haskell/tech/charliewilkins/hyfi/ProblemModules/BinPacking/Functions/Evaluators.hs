@@ -18,7 +18,6 @@ hyFlexFitnessFunction _ new (cap, objs) = 1.0 - ((sum (map (\bin -> ((sum (map (
 
 -- Second clause evaluates old solution
 -- Need to flip it as Heuristics want high scores
-    -- TODO can this be fixed in another way? Should it be?
 improvement :: Evaluator
 improvement old new i = 0 - ((newObjectiveValue old new i ) - (newObjectiveValue new old i))
 

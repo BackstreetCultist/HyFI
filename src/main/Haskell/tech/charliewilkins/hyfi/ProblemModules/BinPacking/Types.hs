@@ -13,6 +13,7 @@ type BuiltHeuristic = (Operator, OperatorMagnitude, Acceptor, Evaluator)
 
 type Solution = [[Int]]
 -- So 0 being in the 0th set means that Object 0 is in Bin 0
+-- And the length of the outer set is the number of bins
 -- Some properties of this ordering:
   -- The length of the inner set concatenated together should equal the number of objects
 property1 :: Solution -> Instance -> Bool
@@ -24,10 +25,10 @@ property2 s _ = repeated (concat s) == []
 property3 :: Solution -> Instance -> Bool
 property3 [] _ = True
 property3 (b:bs) i = (fst i) >= sum [(snd i) !! x | x <- b] && property3 bs i
-  -- The length of the outer set is the number of bins
+-- We can use this to formulate a test for whether a solution is valid
+solutionValid :: Solution -> Instance -> Bool
+solutionValid s i = (property1 s i) && (property2 s i) && (property3 s i)
 
 type Instance = (Double, [Double])
 -- Where the first value is the weight limit of a bin, and the second is the list of bins
 
-solutionValid :: Solution -> Instance -> Bool
-solutionValid s i = (property1 s i) && (property2 s i) && (property3 s i)

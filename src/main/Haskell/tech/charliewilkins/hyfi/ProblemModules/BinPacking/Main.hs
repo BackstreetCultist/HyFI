@@ -12,15 +12,6 @@ import ProblemModules.BinPacking.Functions.Operators (randomPlace, maximisingPla
 generator :: Int -> Instance -> Solution
 generator seed i = nextFit [[]] (randomiseList seed (take (length (snd i)) [0..])) i
 
-firstFit :: Solution -> [Int] -> Instance -> Solution
-firstFit s [] i = s
-firstFit s (x:xs) i = firstFit (placeVal s x i ) xs i
-
-placeVal :: Solution -> Int -> Instance -> Solution
-placeVal [] y _ = [[y]]
-placeVal (x:xs) y i | ((sum (map (\z -> (snd i) !! z) x)) + ((snd i) !! y)) > (fst i) = x : placeVal xs y i
-                    | otherwise = (x ++ [y]) : xs
-
 nextFit :: Solution -> [Int] -> Instance -> Solution
 nextFit s [] _ = s
 nextFit [[]] (x:xs) i = nextFit [[x]] xs i
@@ -43,16 +34,13 @@ loadProblemInstance file = do
                     return (limit,clauses)
 
 getOperatorsByClass :: [[Operator]]
--- getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [destroyHighestBins, destroyLowestBins, destroyRandomBins]]
 getOperatorsByClass = [[randomPlace, maximisingPlace], [repackLowestFilled], [destroyHighestBins, destroyLowestBins, destroyRandomBins]]
 
-getEvaluators :: [Evaluator]
--- getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
-getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
-
 getAcceptors :: [Acceptor]
--- getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, averageFullnessImprovingAcceptor, fullBinsImprovingAcceptor]
-getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, fullBinsImprovingAcceptor]
+getAcceptors = [improvingAcceptor, improvingOrChanceAcceptor, averageFullnessImprovingAcceptor, fullBinsImprovingAcceptor]
+
+getEvaluators :: [Evaluator]
+getEvaluators = [improvement, fullBinsImprovement, searchSpaceDistance, averageFullnessIncrease]
 
 getObjectiveValue :: Evaluator
 getObjectiveValue = newObjectiveValue

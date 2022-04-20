@@ -6,9 +6,6 @@ import Helpers.RandomOperators (getSeed')
 import ProblemModules.BinPacking.Functions.Evaluators (improvement, averageFullnessIncrease, fullBinsImprovement)
 import ProblemModules.BinPacking.Types
 
-naiveAcceptor :: Acceptor
-naiveAcceptor _ _ _ = True
-
 improvingAcceptor :: Acceptor
 improvingAcceptor old new i = (improvement old new i) > 0
 

@@ -43,26 +43,19 @@ maximisingMove seed s = tail (tail s') ++ (\x -> [fst x, snd x]) (randomMoveBetw
 repackLowestFilled :: Operator
 repackLowestFilled s 0 _ = destroyEmpties s
 repackLowestFilled s m i = repackLowestFilled (bestFit (head s') (tail s') i) (m-1) i
-                        where
-                            s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
--- Locate lowest filled bin
--- Best-fit those items back into solution
--- Destroy empties
+                        where s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
 
 destroyHighestBins :: Operator
 destroyHighestBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
-                        where
-                            s' = sortBy (\e1 e2 -> compare (length e2) (length e1)) s
+                        where s' = sortBy (\e1 e2 -> compare (length e2) (length e1)) s
 
 destroyLowestBins :: Operator
 destroyLowestBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
-                        where
-                            s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
+                        where s' = reverse (sortBy (\e1 e2 -> compare (length e2) (length e1)) s)
 
 destroyRandomBins :: Operator
 destroyRandomBins s m i = destroyEmpties (bestFit (concat (take m s')) (drop m s') i)
-                        where
-                            s' = randomiseList (getSeed' + sum (head s)) s
+                        where s' = randomiseList (getSeed' + sum (head s)) s
 
 bestFit :: [Int] -> Solution -> Instance -> Solution
 bestFit [] s _ = s
@@ -73,7 +66,6 @@ bestFitItem :: Int -> Solution -> Instance -> Solution
 bestFitItem x [] _ = [[x]]
 bestFitItem x (b:bs) i | ((sum (map (\z -> (snd i) !! z) b)) + ((snd i) !! x)) > (fst i) = b : bestFitItem x bs i
                        | otherwise = (b ++ [x]) : bs
-
 
 destroyEmpties :: Solution -> Solution
 destroyEmpties s = filter (not . null) s
