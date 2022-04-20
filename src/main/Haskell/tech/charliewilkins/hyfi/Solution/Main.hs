@@ -12,7 +12,6 @@ import HyperHeuristic.Types
 import ProblemModules.BooleanSatisfiability.Main (generator, getProblemInstance, getOperatorsByClass, getEvaluators, getAcceptors, getObjectiveValue)
 import ProblemModules.BooleanSatisfiability.Types
 
--- Application needs this on other side
 type SolutionPopulation = (Instance, [[Solution]])
 
 -- STARTUP --------------------------------------------------------------------
@@ -45,8 +44,7 @@ buildHeuristic h = (selectOperator h, selectOperatorMagnitude h, selectAcceptor 
 
 selectOperator :: HeuristicRepresentation -> Operator
 selectOperator h = binaryToItem (substring 0 3 h) operators
-                where
-                    operators = binaryToItem (substring 3 6 h) getOperatorsByClass
+                where operators = binaryToItem (substring 3 6 h) getOperatorsByClass
 
 selectEvaluator :: HeuristicRepresentation -> Evaluator
 selectEvaluator h = binaryToItem (substring 6 9 h) getEvaluators
@@ -60,9 +58,7 @@ selectOperatorMagnitude h = (binaryVal (substring 12 16 h))+1
 -- Get item from list with reference to binary data,
 -- where there is no direct 1-to-1 relationship
 binaryToItem :: [Char] -> [a] -> a
--- binaryToItem bits xs = xs !! (((length xs)-1) `mod` ((binaryVal bits)+1))
 binaryToItem bits xs = xs !! (binaryVal bits `mod` length xs)
--- Implemented here using modulo
 
 -- Substring between start (inclusive) and end (exclusive)
 substring :: Int -> Int -> [a] -> [a]
