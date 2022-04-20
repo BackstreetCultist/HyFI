@@ -13,6 +13,9 @@ numberOfFullBins _ new i = sum [if (sum (map (\y -> (snd i) !! y) x)) == (fst i)
 averageFullness :: Evaluator
 averageFullness _ new i = (floor (sum [sum (map (\y -> (snd i) !! y) x) | x <- new])) `div` (length new)
 
+hyFlexFitnessFunction :: Solution -> Solution -> Instance -> Double
+hyFlexFitnessFunction _ new (cap, objs) = 1.0 - ((sum (map (\bin -> ((sum (map (\obj -> objs !! obj) bin) / cap) * 2)) new)) / (fromIntegral (length new) :: Double))
+
 -- Second clause evaluates old solution
 -- Need to flip it as Heuristics want high scores
     -- TODO can this be fixed in another way? Should it be?
