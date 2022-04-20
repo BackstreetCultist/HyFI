@@ -53,4 +53,6 @@ you can now run the system as described elsewhere on this page.
 Haskell property tests built with QuickCheck are included,
 and can be run with the following commands:
 
-    ghci src/test/Haskell/tech/charliewilkins/hyfi/*.hs src/test/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/*.hs src/main/Haskell/tech/charliewilkins/hyfi/**/**/**/*.hs [TODO]
+    ghci src/test/Haskell/tech/charliewilkins/hyfi/**/*.hs  src/main/Haskell/tech/charliewilkins/hyfi/**/*.hs
+    import HyFITest
+    main
