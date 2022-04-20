@@ -7,24 +7,20 @@ import System.Random (randomRs, mkStdGen)
 
 import ProblemModules.BooleanSatisfiability.Types
 import ProblemModules.BooleanSatisfiability.Functions.Operators (flipRandomVariable, flipRandomVariableFromBrokenClause, gsat, randomlyReinitialise)
-import ProblemModules.BooleanSatisfiability.Functions.Acceptors (naiveAcceptor, improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
+import ProblemModules.BooleanSatisfiability.Functions.Acceptors (improvingAcceptor, improvingOrChanceAcceptor, substantialImprovementAcceptor)
 import ProblemModules.BooleanSatisfiability.Functions.Evaluators (newObjectiveValue, percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance)
 
 generator :: Int -> Instance -> Solution
 generator s i = take (fst i) (randomRs ('0', '1') (mkStdGen s))
 
 getOperatorsByClass :: [[Operator]]
--- getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
-getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [randomlyReinitialise]]
+getOperatorsByClass = [[flipRandomVariable, flipRandomVariableFromBrokenClause], [gsat], [randomlyReinitialise]]
 
 getAcceptors :: [Acceptor]
--- getAcceptors = [improvingAcceptor, substantialImprovementAcceptor, improvingOrChanceAcceptor]
-getAcceptors = [improvingAcceptor, substantialImprovementAcceptor]
+getAcceptors = [improvingAcceptor, substantialImprovementAcceptor, improvingOrChanceAcceptor]
 
--- All evaluators given *as* evaluators compare two solutions
 getEvaluators :: [Evaluator]
--- getEvaluators = [percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance]
-getEvaluators = [improvement, percentageImprovement, searchSpaceDistance, magnitudeDistance]
+getEvaluators = [percentageImprovement, improvement, searchSpaceDistance, magnitudeDistance]
 
 getProblemInstance :: String -> Instance
 getProblemInstance file = unsafePerformIO (loadProblemInstance file)

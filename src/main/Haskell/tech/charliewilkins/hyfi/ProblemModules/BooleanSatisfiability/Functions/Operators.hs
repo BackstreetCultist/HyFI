@@ -14,7 +14,6 @@ flipRandomVariable s m inst = flipRandomVariable (take i s ++ [bit] ++ drop (i+1
                                 where
                                     bit = if (s !! i) == '0' then '1' else '0'
                                     i = getRandomIndex (getSeed s) s
---TODO having no seed besides the time means that you only change the same var each time
 
 -- Same as above but the variable (i+1) must be in a clause that is broken
 flipRandomVariableFromBrokenClause :: Operator
