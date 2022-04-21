@@ -7,7 +7,7 @@ import Data.List.Unique (sortUniq)
 import Data.Time.Clock (getCurrentTime, diffUTCTime, NominalDiffTime, UTCTime)
 
 import System.Environment (getArgs)
-import System.IO (hFlush, stdout)
+import System.IO (stdout)
 import System.IO.Unsafe (unsafePerformIO)
 
 import HyperHeuristic.Main (generateHeuristicPopulationOfSize, evolvePopulation)
@@ -73,13 +73,6 @@ main = do
 avg :: [Int] -> Int
 avg [] = 0
 avg xs = (sum xs) `div` (length xs)
-
-prompt :: String -> IO String
-prompt text = do
-    putStr text
-    hFlush stdout
-    getLine
--- https://stackoverflow.com/questions/13190314/io-happens-out-of-order-when-using-getline-and-putstr
 
 --Wraps application and evolution into one function
 cyclePopulation :: State SolutionPopulation HeuristicPopulation -> State SolutionPopulation HeuristicPopulation
