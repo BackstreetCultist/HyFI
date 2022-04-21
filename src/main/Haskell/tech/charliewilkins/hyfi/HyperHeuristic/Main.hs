@@ -1,4 +1,3 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
 module HyperHeuristic.Main where
 
 import Data.List (sort)
