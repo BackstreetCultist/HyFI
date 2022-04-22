@@ -6,11 +6,35 @@ which are then applied within the search space.
 
 The following problems are currently implemented, and can be solved by HyFI:
 
- - Boolean MAX-SAT
- - One-Dimensional Bin Packing
+### Boolean MAX-SAT
 
- Each of these problems is implemented in the relevant Problem Module,
- and an Example PM is also included to walk you through the process of implementing a new problem.
+This PM, implemented in the BooleanSatisfiability directory, solves instances
+of the MAX-SAT problem by creating a solution that maximises the number of clauses
+the solution validates. The denary value returned at the end for each solution is the number of valid clauses.
+Three non-Competition and five Competition instances are provided. Competition instances:
+
+ 1. sat09/crafted/parity-games/instance_n3_i3_pp.txt
+ 2. sat09/crafted/parity-games/instance_n3_i4_pp_ci_ce.txt
+ 3. sat09/crafted/parity-games/instance_n3_i3_pp_ci_ce
+ 4. sat07/industrial/jarvisalo/eq.atree.braun.8.unsat.txt
+ 5. ms_random/highgirth/3SAT/HG-3SAT-V300-C1200-4.txt
+
+### One-Dimensional Bin Packing
+
+This PM, implemented in the BinPacking directory, attempts to fit a set of
+objects into as few bins as possible. The denary value returned is the number
+of bins. Four non-Competition and five Competition instances are provided.
+Competition instances:
+
+ 1. trip2004/instance1.txt
+ 2. falkenauer/falk1000-2.txt
+ 3. testdual7/binpack0.txt
+ 4. 2000/50-90/instance1.txt
+ 5. testdual10/binpack0.txt
+
+### Example
+
+ An Example PM is also included to walk you through the process of implementing a new problem.
  Guidance for doing so can be found in the *notes.txt* file in the Example directory.
 
 ## Running
